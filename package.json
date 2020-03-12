@@ -4,7 +4,7 @@
   "description": "Bundle of API tests for Chabe Gateway",
   "main": "index.js",
   "scripts": {
-    "test": "mocha $(find test -name '*.js')"
+    "test-dev": "mocha $(find test -name '*.js')"
   },
   "author": "",
   "license": "ISC",

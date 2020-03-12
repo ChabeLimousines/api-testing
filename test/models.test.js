@@ -1,5 +1,5 @@
-import assert from 'assert';
-const callGW = require('../../services/callGW');
+const assert =require('assert');
+const callGW = require('../services/callGW');
 
 describe('Test Models API', () => {
 
