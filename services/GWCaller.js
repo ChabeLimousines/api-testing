@@ -3,8 +3,8 @@ const qs = require('qs');
 const axios = require('axios');
 require('dotenv').config();
 
-const gatewayUsername = process.env.APIUSERNAME || config.services.gateway.username;
-const gatewayApiKey = process.env.APIKEY || config.services.gateway.apikey;
+const gatewayUsername = process.env.APIUSERNAME || config.gateway.username;
+const gatewayApiKey = process.env.APIKEY || config.gateway.apikey;
 
 class GWCaller {
 
@@ -12,7 +12,7 @@ class GWCaller {
     try {
       const filteredHeaders = { ...headers, authorization: '' };
       const call = {
-        baseURL: `http://${config.services.gateway.host}:${config.services.gateway.port}`,
+        baseURL: `http://${config.gateway.host}:${config.gateway.port}`,
         method,
         url,
         params,
@@ -23,19 +23,13 @@ class GWCaller {
           username: gatewayUsername,
           password: gatewayApiKey,
         },
+        timeout: 5000,
       };
       return await axios(call);
     } catch (e) {
       throw e.response || e;
     }
   };
-};
-
-GWCaller.methods = {
-  POST,
-  GET,
-  PATCH,
-  DELETE,
 };
 
 module.exports = GWCaller;
