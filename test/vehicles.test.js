@@ -3,21 +3,22 @@ const GWCaller = require('../services/GWCaller')
 
 const gwCaller = new GWCaller();
 
+const testVehi = {
+  vehicleId: "Reserved1",
+  registration: "RESERVED1",
+  label: "labeL1",
+  mileage: 666,
+  nbSeats: 0,
+  firstRegDate: "2015-01-01",
+  initialCalendar: [{
+    dateStart: "2020-02-20T10:00:00.000Z",
+    dateEnd: "2020-03-19T10:00:00.000Z",
+    agency: "CHABE",
+}]};
+
 describe('Test VEHICLES API', () => {
 
   let theModel;
-  const testVehi = {
-    vehicleId: "Reserved1",
-    registration: "RESERVED1",
-    label: "labeL1",
-    mileage: 666,
-    nbSeats: 0,
-    firstRegDate: "2015-01-01",
-    initialCalendar: [{
-      dateStart: "2020-02-20T10:00:00.000Z",
-      dateEnd: "2020-03-19T10:00:00.000Z",
-      agency: "CHABE",
-  }]};
   const testUpdate = {
     label: "label2",
     mileage: 777,
@@ -100,5 +101,6 @@ describe('Test VEHICLES API', () => {
       });
     });
   });
-
 });
+
+module.exports = testVehi;
