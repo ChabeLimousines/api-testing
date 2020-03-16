@@ -6,22 +6,12 @@ const gwCaller = new GWCaller();
 describe('Test VEHICLES API', () => {
 
   let theModel;
-  describe('GET ALL', () => {
-    it('should return models to pick the first', async () => {
-      const allModels = await gwCaller.call(
-        'GET', `/vehicles/models/`, {}, {}, {},
-      );
-      theModel = allModels.data[0];
-      assert.ok(theModel);
-    });
-  });
-
   const testVehi = {
-    vehicleId: "DH-699-KP10",
-    modelName: theModel,
-    registration: "DH-699-KP10",
-    label: "label1",
+    vehicleId: "Reserved1",
+    registration: "RESERVED1",
+    label: "labeL1",
     mileage: 666,
+    nbSeats: 0,
     firstRegDate: "2015-01-01",
     initialCalendar: [{
       dateStart: "2020-02-20T10:00:00.000Z",
@@ -31,15 +21,33 @@ describe('Test VEHICLES API', () => {
   const testUpdate = {
     label: "label2",
     mileage: 777,
+    nbSeats: 4,
     firstRegDate: "2014-02-01",
   };
+  const vehiId = testVehi.vehicleId.toUpperCase();
+
+  describe('GET ALL', () => {
+    it('should return models to pick the first', async () => {
+      const allModels = await gwCaller.call(
+        'GET', `/vehicles/models/`, {}, {}, {},
+      );
+      theModel = allModels.data[0];
+      testVehi.modelName = theModel.name;
+      assert.ok(testVehi.modelName);
+      assert.ok(theModel);
+    });
+  });
 
   describe('DELETE', () => {
     it('should delete model or the ID is free', async () => {
-      const delVehi = await gwCaller.call(
-        'DELETE', `/vehicles/${testVehi.vehicleId}`, {}, {}, {},
-      );
-      assert.equal(delVehi.data.message, `Model ${testModel.name} DELETE success`);
+      try {
+        const delVehi = await gwCaller.call(
+          'DELETE', `/vehicles/${testVehi.vehicleId}`, {}, {}, {},
+        );
+        assert.equal(delVehi.data.message, 'Vehicle deleted');
+      } catch (e) {
+        assert.equal(`Vehicle ${vehiId} not found`, e.data.error);
+      }
     });
   });
 
@@ -48,37 +56,47 @@ describe('Test VEHICLES API', () => {
       const postVehi = await gwCaller.call(
         'POST', '/vehicles/', {}, {}, testVehi,
       );  
-      assert.equal(postModel.data.message, 'Model synchronised');
-      assert.deepEqual(postModel.data.model, testModel);
+      assert.deepEqual(postVehi.data.vehicleId, vehiId);
     });
   });
 
   describe('GET', () => {
     it('should return the vehicle', async () => {
-      const getModel = await gwCaller.call(
+      const postVehi = await gwCaller.call(
         'GET', `/vehicles/${testVehi.vehicleId}`, {}, {}, {},
       );  
-      assert.deepEqual(getModel.data, testModel);
+      assert.deepEqual(postVehi.data, {
+        vehicleId: vehiId,
+        registration: testVehi.registration.toUpperCase(),
+        label: testVehi.label.toUpperCase(),
+        mileage: testVehi.mileage,
+        firstRegDate: "2015-01-01",
+        nbSeats: testVehi.nbSeats,
+        modelName: testVehi.modelName,
+      });
     });
   });
 
   describe('PATCH', () => {
-    it('should update the model', async () => {
+    it('should update the vehicle', async () => {
       const patchModel = await gwCaller.call(
         'PATCH', `/vehicles/${testVehi.vehicleId}`, {}, {}, testUpdate,
       );  
-      assert.equal(patchModel.data.message, `Model ${testModel.name} update success`);
-      assert.deepEqual(patchModel.data.model, testUpdate);
+      assert.equal(patchModel.data.vehicleId, vehiId);
     });
   });
 
   describe('GET', () => {
-    it('should return the updated model', async () => {
-      const getModel = await gwCaller.call(
-        'GET', `/vehicles/${testModel.name}`, {}, {}, {},
+    it('should return the updated vehicle', async () => {
+      const getVehi = await gwCaller.call(
+        'GET', `/vehicles/${testVehi.vehicleId}`, {}, {}, {},
       );
       Object.keys(testUpdate).forEach(key => {
-        assert.equal(getModel.data[key], testUpdate[key]);
+        if(typeof testUpdate[key] === 'string') {
+          assert.equal(getVehi.data[key], testUpdate[key].toUpperCase());
+        } else {
+          assert.equal(getVehi.data[key], testUpdate[key]);
+        }
       });
     });
   });
