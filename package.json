@@ -4,7 +4,8 @@
   "description": "Bundle of API tests for Chabe Gateway",
   "main": "index.js",
   "scripts": {
-    "test-dev": "mocha --timeout 25000 $(find test -name '*.js')"
+    "test-dev": "NODE_ENV=dev mocha --timeout 25000 $(find test -name '*.js')",
+    "test-staging": "NODE_ENV=staging mocha --timeout 25000 $(find test -name '*.js')"
   },
   "author": "",
   "license": "ISC",

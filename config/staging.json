@@ -1,0 +1,8 @@
+{
+  "gateway": {
+    "host": "10.64.11.55",
+    "port": 4104,
+    "apikey": "b30954b416168082e0d9809ecc827ed59b35dde8949524fa8a0ecd6efbe8d5b9da8eff7f06f6404f10bd44dbd888947e06f088711fd96827dcaabbe9d3812bd5",
+    "username": "first_admin"
+  }
+}
