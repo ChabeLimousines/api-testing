@@ -26,6 +26,22 @@ describe('Test unavailabilities API', () => {
     });
   });
 
+  describe('GET MANY UNAV', () => {
+    it('should return the unav', async () => {
+      const getManyUnav = await gwCaller.call(
+        'GET', `/vehicles/${vehicleId}/unavailabilities/`,
+        { 
+          from: "2019-01-01 14:00:00",
+          to: "2020-12-30 18:30:00",
+        } , {}, {},
+      );
+      assert(
+        getManyUnav.data.find(unav => unav.idUnavailability === testUnav.idUnavailability) !== undefined,
+        'Unavailability succesffully removed',
+      );
+    });
+  });
+  
   describe('GET', () => {
     it('should get the unav', async () => {
       const postUnav = await gwCaller.call(
