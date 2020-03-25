@@ -23,7 +23,7 @@ class GWCaller {
           username: gatewayUsername,
           password: gatewayApiKey,
         },
-        timeout: 5000,
+        timeout: 25000,
       };
       return await axios(call);
     } catch (e) {
