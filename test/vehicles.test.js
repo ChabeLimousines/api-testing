@@ -284,13 +284,10 @@ describe('MOUNT unavailabilities API', () => {
   });
 
   describe('GET', () => {
-    it('should return an error', async () => {
-      try {
-        await gwCaller.call('GET',
-          `/vehicles/${vehicleId}/unavailabilities/${testUnav.idUnavailability}`);
-      } catch (e) {
-        assert.deepEqual(e.status, 400);
-      }
+    it('should return an 404', async () => {
+      const getDeleted = await gwCaller
+        .call('GET', `/vehicles/${vehicleId}/unavailabilities/${testUnav.idUnavailability}`);
+      assert.equal(getDeleted.status, 404);
     });
   });
 });
