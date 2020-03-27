@@ -1,0 +1,19 @@
+env:
+  es6: true
+  node: true
+  jest: true
+extends: airbnb-base
+globals:
+  Atomics: readonly
+  SharedArrayBuffer: readonly
+parserOptions:
+  ecmaVersion: 2018
+  sourceType: module
+rules:
+  prettier/prettier: off
+  no-loop-func: off
+  no-console: off
+  import/no-dynamic-require: off
+  global-require: off
+  no-await-in-loop: off
+  no-param-reassign: off

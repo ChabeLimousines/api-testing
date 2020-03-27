@@ -4,17 +4,20 @@
   "description": "Bundle of API tests for Chabe Gateway",
   "main": "index.js",
   "scripts": {
-    "test-dev": "NODE_ENV=dev mocha $(find test -name '*.js') --timeout 25000",
+    "test": "NODE_ENV=dev mocha $(find test -name '*.js') --timeout 25000",
     "test-staging": "NODE_ENV=staging mocha $(find test -name '*.js') --timeout 25000"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
     "mocha": "^7.1.0"
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "chai": "^4.2.0",
     "config": "^3.3.0",
     "dotenv": "^8.2.0",
     "qs": "^6.9.1"
