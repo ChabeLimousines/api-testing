@@ -211,6 +211,22 @@ describe('MOUNT unavailabilities API', () => {
     });
   });
 
+  describe('test void parent vehicule', () => {
+    it('get should return a 404', async () => {
+      const getVoid = await tryCall('GET', `/vehicles/NOPENOPE/unavailabilities/${testUnav.idUnavailability}`);
+      assert.equal(getVoid.status, 404);
+    });
+    it('delete should return a 404', async () => {
+      const getVoid = await tryCall('DELETE', `/vehicles/NOPENOPE/unavailabilities/${testUnav.idUnavailability}`);
+      assert.equal(getVoid.status, 404);
+    });
+    it('patch should return a 404', async () => {
+      const getVoid = await tryCall('PATCH', `/vehicles/NOPENOPE/unavailabilities/${testUnav.idUnavailability}`);
+      assert.equal(getVoid.status, 404);
+    });
+  });
+
+
   describe('GET MANY UNAV', () => {
     it('should return the unav', async () => {
       const getManyUnav = await tryCall('GET', `/vehicles/${vehicleId}/unavailabilities/`, {},
