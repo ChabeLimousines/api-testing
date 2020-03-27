@@ -39,6 +39,10 @@ describe('MOUNT MODELS API', () => {
       const getVoid = await tryCall('DELETE', '/vehicles/models/NOPENOPE');
       assert.equal(getVoid.status, 404);
     });
+    it('patch should return a 404', async () => {
+      const getVoid = await tryCall('PATCH', '/vehicles/models/NOPENOPE');
+      assert.equal(getVoid.status, 404);
+    });
   });
 
   describe('test POST new', () => {
@@ -114,6 +118,10 @@ describe('MOUNT VEHICLES API', () => {
       const delVehi = await tryCall('DELETE', '/vehicles/NOPENOPE', testVehi);
       assert.equal(delVehi.status, 404);
     });
+    it('patch void should 404', async () => {
+      const delVehi = await tryCall('PATCH', '/vehicles/NOPENOPE', testVehi);
+      assert.equal(delVehi.status, 404);
+    });
   });
 
   describe('test POST', () => {
@@ -183,6 +191,10 @@ describe('MOUNT unavailabilities API', () => {
     });
     it('delete should return a 404', async () => {
       const getVoid = await tryCall('DELETE', `/vehicles/${vehicleId}/unavailabilities/NOPE`);
+      assert.equal(getVoid.status, 404);
+    });
+    it('patch should return a 404', async () => {
+      const getVoid = await tryCall('PATCH', `/vehicles/${vehicleId}/unavailabilities/NOPE`);
       assert.equal(getVoid.status, 404);
     });
   });
