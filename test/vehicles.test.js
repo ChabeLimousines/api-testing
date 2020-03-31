@@ -111,16 +111,16 @@ describe('MOUNT VEHICLES API', () => {
 
   describe('test void ressource', () => {
     it('get void should 404', async () => {
-      const postVehi = await tryCall('GET', '/vehicles/NOPENOPE', testVehi);
+      const postVehi = await tryCall('GET', '/vehicles/NOPENOPE');
       assert.equal(postVehi.status, 404);
     });
     it('delete void should 404', async () => {
-      const delVehi = await tryCall('DELETE', '/vehicles/NOPENOPE', testVehi);
+      const delVehi = await tryCall('DELETE', '/vehicles/NOPENOPE');
       assert.equal(delVehi.status, 404);
     });
     it('patch void should 404', async () => {
-      const delVehi = await tryCall('PATCH', '/vehicles/NOPENOPE', testVehi);
-      assert.equal(delVehi.status, 404);
+      const patchVehi = await tryCall('PATCH', '/vehicles/NOPENOPE', testUpdate);
+      assert.equal(patchVehi.status, 404);
     });
   });
 
