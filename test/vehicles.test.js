@@ -40,7 +40,7 @@ describe('MOUNT MODELS API', () => {
       assert.equal(getVoid.status, 404);
     });
     it('patch should return a 404', async () => {
-      const getVoid = await tryCall('PATCH', '/vehicles/models/NOPENOPE');
+      const getVoid = await tryCall('PATCH', '/vehicles/models/NOPENOPE', testUpdate);
       assert.equal(getVoid.status, 404);
     });
   });
@@ -193,7 +193,7 @@ describe('MOUNT unavailabilities API', () => {
       assert.equal(getVoid.status, 404);
     });
     it('patch should return a 404', async () => {
-      const getVoid = await tryCall('PATCH', `/vehicles/${testVehi.vehicleId}/unavailabilities/NOPE`);
+      const getVoid = await tryCall('PATCH', `/vehicles/${testVehi.vehicleId}/unavailabilities/NOPE`, testUpdate);
       assert.equal(getVoid.status, 404);
     });
   });
