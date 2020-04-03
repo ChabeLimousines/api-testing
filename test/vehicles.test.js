@@ -1,18 +1,5 @@
 const assert = require('assert');
-const GWCaller = require('../services/GWCaller');
-
-const gwCaller = new GWCaller();
-
-async function tryCall(verb, url, data = {}, params = {}) {
-  let ret;
-  try {
-    ret = await gwCaller.call(verb, url, params, {}, data);
-  } catch (e) {
-    // console.log(e.data || e);
-    ret = e;
-  }
-  return ret;
-}
+const tryCall = require('../utils/tryCall.utils');
 
 // MODELS
 const testModel = {
