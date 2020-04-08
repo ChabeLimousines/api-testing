@@ -1,27 +1,26 @@
 const assert = require('assert');
+const { expect } = require('chai');
 const tryCall = require('../utils/tryCall.utils');
-const { strToUpper, updatedObject } = require('../utils/array.utils');
+const { updatedObject } = require('../utils/objects.utils');
 
 const placeFull = {
   placeId: 'RESERVedPLACe1',
-  address: '92, Addresse de test',
+  address: '92 Addresse de test',
   postalCode: '92000',
-  city: 'NANTERRE',
+  city: 'NANeErrE',
   latitude: 48.890011,
   longitude: 2.197020,
-  contry: 'FRANCE',
+  country: 'FRanCE',
 };
 const placeMin = {
   placeId: 'reservedPlace2',
 };
 const placePatchFull = {
-  placeId: 'RESERVedPLACe1',
   address: '1, Addresse de test',
   latitude: 47.890011,
   longitude: 3.197020,
 };
 const placePatchMin = {
-  placeId: 'reservedPlace2',
   address: '2 update test',
 };
 
@@ -43,23 +42,23 @@ describe('Mount PLACES API', () => {
   describe('POST places', () => {
     it('No placeId, should 400', async () => {
       const post = await tryCall('POST', '/places/', {
-        address: '92, Addresse de test',
+        address: '92 Addresse de test',
         postalCode: '92000',
         city: 'NANTERRE',
         latitude: 48.890011,
         longitude: 2.197020,
-        contry: 'FRANCE',
+        country: 'FRANCE',
       });
       assert.equal(post.status, 400);
     });
-    it('should 200 POST full body', async () => {
+    it('should 201 POST full body', async () => {
       const post = await tryCall('POST', '/places/', placeFull);
-      assert.equal(post.status, 200);
+      assert.equal(post.status, 201);
       assert.equal(post.data.placeId, placeFull.placeId.toUpperCase());
     });
-    it('should 200 POST min body', async () => {
+    it('should 201 POST min body', async () => {
       const post = await tryCall('POST', '/places/', placeMin);
-      assert.equal(post.status, 200);
+      assert.equal(post.status, 201);
       assert.equal(post.data.placeId, placeMin.placeId.toUpperCase());
     });
     it('should 409 already posted', async () => {
@@ -69,14 +68,28 @@ describe('Mount PLACES API', () => {
   });
   describe('GET new places', () => {
     it('should GET full body', async () => {
-      const getPlace = await tryCall('GET', `/places/${placeMin.placeId}`);
+      const getPlace = await tryCall('GET', `/places/${placeFull.placeId}`);
       assert.equal(getPlace.status, 200);
-      assert.deepEqual(getPlace.data, strToUpper(placeFull));
+      assert.equal(getPlace.data.address, placeFull.address);
+      assert.equal(getPlace.data.postalCode, placeFull.postalCode.toUpperCase());
+      assert.equal(getPlace.data.placeId, placeFull.placeId.toUpperCase());
+      assert.equal(getPlace.data.city, placeFull.city.toUpperCase());
+      assert.equal(getPlace.data.country.trim(), placeFull.country.toUpperCase());
+      expect(getPlace.data.latitude).to.be.closeTo(placeFull.latitude, 0.001);
+      expect(getPlace.data.longitude).to.be.closeTo(placeFull.longitude, 0.001);
     });
     it('should GET min body', async () => {
       const getPlace = await tryCall('GET', `/places/${placeMin.placeId}`);
       assert.equal(getPlace.status, 200);
-      assert.deepEqual(getPlace.data, strToUpper(placeFull));
+      assert.deepEqual(getPlace.data, {
+        placeId: 'RESERVEDPLACE2',
+        address: null,
+        postalCode: null,
+        city: null,
+        latitude: null,
+        longitude: null,
+        country: null,
+      });
     });
   });
   describe('PATCH places', () => {
@@ -97,14 +110,29 @@ describe('Mount PLACES API', () => {
   });
   describe('GET patched places', () => {
     it('should GET full body updated', async () => {
-      const getPlace = await tryCall('GET', `/places/${placeMin.placeId}`);
+      const getPlace = await tryCall('GET', `/places/${placeFull.placeId}`);
+      const expected = updatedObject(placeFull, placePatchFull);
       assert.equal(getPlace.status, 200);
-      assert.deepEqual(getPlace.data, strToUpper(updatedObject(placeMin, placePatchMin)));
+      assert.equal(getPlace.data.address, expected.address);
+      assert.equal(getPlace.data.postalCode, expected.postalCode);
+      assert.equal(getPlace.data.placeId, expected.placeId.toUpperCase());
+      assert.equal(getPlace.data.city, expected.city.toUpperCase());
+      assert.equal(getPlace.data.country.trim(), expected.country.toUpperCase());
+      expect(getPlace.data.latitude).to.be.closeTo(expected.latitude, 0.001);
+      expect(getPlace.data.longitude).to.be.closeTo(expected.longitude, 0.001);
     });
     it('should GET min body updated', async () => {
-      const getPlace = await tryCall('GET', `/places/${placeFull.placeId}`);
+      const getPlace = await tryCall('GET', `/places/${placeMin.placeId}`);
       assert.equal(getPlace.status, 200);
-      assert.deepEqual(getPlace.data, strToUpper(updatedObject(placeFull, placePatchFull)));
+      assert.deepEqual(getPlace.data, {
+        placeId: 'RESERVEDPLACE2',
+        address: '2 update test',
+        latitude: null,
+        longitude: null,
+        postalCode: null,
+        city: null,
+        country: null,
+      });
     });
   });
 });
@@ -224,11 +252,11 @@ describe('Unmount PLACES API', () => {
       assert.equal(delPlace.status, 200);
     });
     it('GET deleted should 404', async () => {
-      const getPlace = await tryCall('DELETE', `/places/${placeFull.placeId}`);
+      const getPlace = await tryCall('GET', `/places/${placeFull.placeId}`);
       assert.equal(getPlace.status, 404);
     });
     it('GET deleted should 404', async () => {
-      const getPlace = await tryCall('DELETE', `/places/${placeMin.placeId}`);
+      const getPlace = await tryCall('GET', `/places/${placeMin.placeId}`);
       assert.equal(getPlace.status, 404);
     });
   });
