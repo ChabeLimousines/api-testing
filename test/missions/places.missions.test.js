@@ -158,4 +158,9 @@ function testUnmountPlaces() {
   });
 }
 
-module.exports = { testMountPlaces, testUnmountPlaces };
+module.exports = {
+  testMountPlaces,
+  testUnmountPlaces,
+  placeFull,
+  placeMin,
+};

@@ -125,4 +125,9 @@ function testUnmountPassenger() {
   });
 }
 
-module.exports = { testMountPassenger, testUnmountPassenger };
+module.exports = {
+  testMountPassenger,
+  testUnmountPassenger,
+  passFull,
+  passMin,
+};
