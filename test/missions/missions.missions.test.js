@@ -1,6 +1,7 @@
 const assert = require('assert');
 const { expect } = require('chai');
 const tryCall = require('../../utils/tryCall.utils');
+const { filterCommonKeys } = require('../../utils/objects.utils');
 // const { passFull, passMin } = require('./passenger.missions.test');
 // const { placeFull, placeMin } = require('./places.missions.test');
 const placeFull = { placeId: 'CDG' };
@@ -202,6 +203,22 @@ function testMountMissions() {
         hireDate: '2020-06-16T01:00:00Z',
         serviceType: '*',
         department: 'NANTERRE2',
+      }, {
+        client: 'FS',
+        pickupPlace: 'NOPENOPE',
+        hireDate: '2020-06-16T01:00:00Z',
+        serviceType: '*',
+        department: 'NANTERRE2',
+      }]);
+      assert.equal(post.status, 412);
+    });
+    it('should 412 when double 412 error', async () => {
+      const post = await tryCall('POST', '/missions/', [{
+        client: 'NOPENOPE',
+        pickupPlace: placeFull.placeId,
+        hireDate: '2020-06-16T01:00:00Z',
+        serviceType: '*',
+        department: 'NANTERRE2',
       }]);
       assert.equal(post.status, 412);
     });
@@ -228,44 +245,91 @@ function testMountMissions() {
     });
   });
 
+  describe('test POST', () => {
+    it('should POST 1 mission', async () => {
+      const post = await tryCall('POST', '/missions/', data1);
+      assert.equal(post.status, 201);
+      assert.equal(post.data.success[0].client, data1[0].client.toUpperCase());
+      assert.equal(post.data.success[0].pickupPlace, data1[0].pickupPlace);
+      assert.equal(post.data.success[0].dropoffPlace, data1[0].dropoffPlace);
+      assert.equal(post.data.success[0].hireDate, data1[0].hireDate);
+      assert.equal(post.data.success[0].hireEnd, data1[0].hireEnd);
+      assert.equal(post.data.success[0].department, data1[0].department);
+      assert.equal(post.data.success[0].serviceType, data1[0].serviceType);
+      assert.equal(post.data.success[0].pax, data1[0].pax);
+      assert.equal(post.data.success[0].travelDetails, data1[0].travelDetails);
+      assert.equal(post.data.success[0].requestedVehicleClass, data1[0].requestedVehicleClass);
+      assert.equal(post.data.success[0].refClient, data1[0].refClient);
+      assert.equal(post.data.success[0].passenger.civility,
+        data1[0].passenger.newPassenger.civility);
+      assert.equal(post.data.success[0].passenger.lastName,
+        data1[0].passenger.newPassenger.lastName);
+      assert.equal(post.data.success[0].passenger.firstName,
+        data1[0].passenger.newPassenger.firstName);
+      assert.equal(post.data.success[0].passenger.phoneNumber,
+        data1[0].passenger.newPassenger.phoneNumber);
+      assert.equal(post.data.success[0].observation, data1[0].observation);
+      expect(post.data.success[0].missionId).to.be.a('number');
+      expect(post.data.success[0].passengerId).to.be.a('number');
+      // add missionId
+      data1[0].missionId = post.data[0].missionId;
+      // update passenger
+      delete data1[0].passenger;
+      data1[0].passengerId = post.data[0].passengerId;
+    });
+
+    it('should POST 4 missions', async () => {
+      const post = await tryCall('POST', '/missions/', data2);
+      assert.equal(post.status, 201);
+      for (let i = 0; i < data2.length; i += 1) {
+        assert.deepEqual(filterCommonKeys(post.data.success[i], data2[i]), data2[i]);
+        expect(post.data.success[2].missionId).to.be.a('number');
+        // add mission id
+        data2[i].missionId = post.data.success[i].missionId;
+        // update passenger
+        delete data2[i].passenger;
+        data2[i].passengerid = post.data.success[i].passenger.passengerId;
+      }
+    });
+  });
+
+  describe('test GET existing missions', () => {
+    it('GET the mission from data1', async () => {
+      const get = await tryCall('POST', `/missions/${data1[0].missionId}`);
+      assert.deepEqual(get.data, data1[0]);
+    });
+    it('GET all 4 missions from data2', async () => {
+      for (let i = 0; i < data2.length; i += 1) {
+        const get = await tryCall('POST', `/missions/${data1[0].missionId}`);
+        assert.deepEqual(get.data, data1[i]);
+      }
+    });
+    it('GET mission full with new passenger', async () => {
+    });
+  });
+
+  describe('test PATCH', () => {
+    it('PATCH mission mini', async () => {
+    });
+    it('PATCH mission full with passengerId', async () => {
+    });
+    it('PATCH mission full with new passenger', async () => {
+    });
+  });
+
+  describe('test GET patched missions', () => {
+    it('GET mission mini', async () => {
+    });
+    it('GET mission full with passengerId', async () => {
+    });
+    it('GET mission full with new passenger', async () => {
+    });
+  });
+}
 
 /*
 test get many missions
 */
-// describe('test POST', () => {
-  //   it('should POST 1 mission', async () => {
-  //   });
-  //   it('should POST 4 missions', async () => {
-  //   });
-  // });
-
-  // describe('test GET existing missions', () => {
-  //   it('GET mission mini', async () => {
-  //   });
-  //   it('GET mission full with passengerId', async () => {
-  //   });
-  //   it('GET mission full with new passenger', async () => {
-  //   });
-  // });
-
-  // describe('test PATCH', () => {
-  //   it('PATCH mission mini', async () => {
-  //   });
-  //   it('PATCH mission full with passengerId', async () => {
-  //   });
-  //   it('PATCH mission full with new passenger', async () => {
-  //   });
-  // });
-
-  // describe('test GET patched missions', () => {
-  //   it('GET mission mini', async () => {
-  //   });
-  //   it('GET mission full with passengerId', async () => {
-  //   });
-  //   it('GET mission full with new passenger', async () => {
-  //   });
-  // });
-}
 
 function testUnmountMissions() {
 

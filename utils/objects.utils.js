@@ -11,4 +11,10 @@ module.exports = {
     });
     return object;
   },
+  filterCommonKeys: (source, filter) => {
+    const ret = {};
+    Object.keys(filter).forEach((key) => {
+      ret[key] = source[key];
+    });
+  },
 };
