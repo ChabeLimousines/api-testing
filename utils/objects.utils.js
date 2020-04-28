@@ -6,10 +6,11 @@ module.exports = {
     return object;
   },
   updatedObject: (object, updates) => {
-    Object.keys(object).forEach((key) => {
-      object[key] = updates[key] || object[key];
+    const ret = { ...object };
+    Object.keys(updates).forEach((key) => {
+      ret[key] = updates[key];
     });
-    return object;
+    return ret;
   },
   filterCommonKeys: (source, filter) => {
     const ret = {};

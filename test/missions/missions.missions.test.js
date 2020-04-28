@@ -1,7 +1,7 @@
 const assert = require('assert');
 const { expect } = require('chai');
 const tryCall = require('../../utils/tryCall.utils');
-const { filterCommonKeys } = require('../../utils/objects.utils');
+const { filterCommonKeys, updatedObject } = require('../../utils/objects.utils');
 // const { passFull, passMin } = require('./passenger.missions.test');
 // const { placeFull, placeMin } = require('./places.missions.test');
 const placeFull = { placeId: 'CDG' };
@@ -41,10 +41,18 @@ const data2 = [{
   serviceType: '_',
   department: 'NANTERRE2',
   pax: 0,
+  destProv: 'London St Pancras',
+  missionGroupId: '121212',
   travelDetails: 'AF0002',
   requestedVehicleClass: 'ECLASS',
   observation: 'data2 mission1',
+  modeTVA: true,
+  hireNumber: 'AAGD65',
+  bookingNumber: '987856789',
   refClient: 'test123',
+  internalObservation: 'Internal secret message',
+  contact: 'Jean-Robert',
+  operator: 'INTERAFCE',
   passenger: {
     newPassenger: {
       civility: 'Mme',
@@ -93,6 +101,42 @@ const data2 = [{
     passengerId: passMin.passengerId,
   },
 }];
+
+// To patch data2[1]
+const patchLong = {
+  dropoffPlace: placeMin.placeId,
+  hireDate: '2020-06-17T01:00:00Z',
+  hireEnd: '2020-06-18T03:15:00.000Z',
+  serviceType: 'TDG',
+  department: 'NANTERRE2',
+  pax: 2,
+  destProv: 'Lyon St Ex',
+  missionGroupId: '00000',
+  travelDetails: 'AF0003',
+  requestedVehicleClass: 'SCLASS',
+  observation: 'data2 mission2',
+  modeTVA: false,
+  hireNumber: 'TRUC7676',
+  bookingNumber: '11111',
+  refClient: 'lala__0',
+  internalObservation: 'Secret message',
+  contact: 'Marie-Micheline',
+  operator: 'INTERAFCE',
+  passenger: {
+    newPassenger: {
+      civility: 'M.',
+      lastName: 'Un',
+      firstName: 'Nouveau',
+      phoneNumber: '0909098765',
+    },
+  },
+};
+// To patch data2[0]
+const patchShort = {
+  pickupPlace: placeFull.placeId,
+  hireDate: '2020-06-15T01:00:00Z',
+  serviceType: '_',
+};
 
 function testMountMissions() {
   describe('test void ressources', () => {
@@ -273,9 +317,11 @@ function testMountMissions() {
       expect(post.data.success[0].passengerId).to.be.a('number');
       // add missionId
       data1[0].missionId = post.data[0].missionId;
+      expect(data1[0].missionId).to.be.a('number');
       // update passenger
       delete data1[0].passenger;
       data1[0].passengerId = post.data[0].passengerId;
+      expect(data1[0].passenger).to.be.a('number');
     });
 
     it('should POST 4 missions', async () => {
@@ -286,9 +332,11 @@ function testMountMissions() {
         expect(post.data.success[2].missionId).to.be.a('number');
         // add mission id
         data2[i].missionId = post.data.success[i].missionId;
+        expect(data2[i].missionId).to.be.a('number');
         // update passenger
         delete data2[i].passenger;
-        data2[i].passengerid = post.data.success[i].passenger.passengerId;
+        data2[i].passengerId = post.data.success[i].passenger.passengerId;
+        expect(data2[i].passenger).to.be.a('number');
       }
     });
   });
@@ -304,25 +352,27 @@ function testMountMissions() {
         assert.deepEqual(get.data, data1[i]);
       }
     });
-    it('GET mission full with new passenger', async () => {
-    });
   });
 
   describe('test PATCH', () => {
-    it('PATCH mission mini', async () => {
+    it('PATCH mission short', async () => {
+      const patch = await tryCall('PATCH', `/missions/${data2[0].missionId}`, patchShort);
+      assert.equal(patch.status, 200);
     });
     it('PATCH mission full with passengerId', async () => {
-    });
-    it('PATCH mission full with new passenger', async () => {
+      const patch = await tryCall('PATCH', `/missions/${data2[1].missionId}`, patchLong);
+      assert.equal(patch.status, 200);
     });
   });
 
   describe('test GET patched missions', () => {
     it('GET mission mini', async () => {
+      const get = await tryCall('POST', `/missions/${data2[0].missionId}`);
+      assert.deepEqual(get.data, updatedObject(data2[0], patchShort));
     });
     it('GET mission full with passengerId', async () => {
-    });
-    it('GET mission full with new passenger', async () => {
+      const get = await tryCall('POST', `/missions/${data2[1].missionId}`);
+      assert.deepEqual(get.data, updatedObject(data2[1], patchLong));
     });
   });
 }
