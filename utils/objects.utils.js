@@ -17,5 +17,6 @@ module.exports = {
     Object.keys(filter).forEach((key) => {
       ret[key] = source[key];
     });
+    return ret;
   },
 };
