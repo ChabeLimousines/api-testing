@@ -42,7 +42,7 @@ const data2 = [{
   department: 'NANTERRE2',
   pax: 1,
   destProv: 'London St Pancras',
-  missionGroupId: 121212,
+  missionGroupId: 0,
   travelDetails: 'AF0002',
   requestedVehicleClass: 'ECLASS',
   observation: 'data2 mission1',
@@ -105,7 +105,7 @@ const data2 = [{
 // To patch data2[1]
 const patchLong = {
   dropoffPlace: placeMin.placeId,
-  hireDate: '2020-06-17T01:00:00.00Z',
+  hireDate: '2020-06-17T01:00:00.000Z',
   hireEnd: '2020-06-18T03:15:00.000Z',
   serviceType: 'TDG',
   department: 'NANTERRE2',
@@ -119,12 +119,11 @@ const patchLong = {
   hireNumber: 'TRUC7676',
   bookingNumber: '11111',
   refClient: 'lala__0',
-  internalObservation: 'Secret message',
-  contact: 'Marie-Micheline',
-  operator: 'INTERAFCE',
+  internalObservation: 'Secret message 2',
+  salesRep: 'INTERFACE',
   passenger: {
     newPassenger: {
-      civility: 'M.',
+      civility: 'M',
       lastName: 'Un',
       firstName: 'Nouveau',
       phoneNumber: '0909098765',
@@ -139,158 +138,158 @@ const patchShort = {
 };
 
 function testMountMissions() {
-  describe('test void ressources', () => {
-    it('get should return a 404', async () => {
-      const getVoid = await tryCall('GET', '/missions/0');
-      assert.equal(getVoid.status, 404);
-    });
-    it('delete should return a 404', async () => {
-      const getVoid = await tryCall('DELETE', '/missions/0');
-      assert.equal(getVoid.status, 404);
-    });
-    it('patch should return a 404', async () => {
-      const getVoid = await tryCall('PATCH', '/missions/0');
-      assert.equal(getVoid.status, 404);
-    });
-  });
+  // describe('test void ressources', () => {
+  //   it('get should return a 404', async () => {
+  //     const getVoid = await tryCall('GET', '/missions/0');
+  //     assert.equal(getVoid.status, 404);
+  //   });
+  //   it('delete should return a 404', async () => {
+  //     const getVoid = await tryCall('DELETE', '/missions/0');
+  //     assert.equal(getVoid.status, 404);
+  //   });
+  //   it('patch should return a 404', async () => {
+  //     const getVoid = await tryCall('PATCH', '/missions/0');
+  //     assert.equal(getVoid.status, 404);
+  //   });
+  // });
 
 
-  describe('test POST incorrects', () => {
-    it('No clientId, should 400', async () => {
-      const post = await tryCall('POST', '/missions/', [{
-        pickupPlace: placeFull.placeId,
-        hireDate: '2020-06-16T01:00:00Z',
-        serviceType: '*',
-        department: 'NANTERRE2',
-      }]);
-      assert.equal(post.status, 400);
-    });
-    it('No pickup place, should 400', async () => {
-      const post = await tryCall('POST', '/missions/', [{
-        client: 'FS',
-        hireDate: '2020-06-16T01:00:00Z',
-        serviceType: '*',
-        department: 'NANTERRE2',
-      }]);
-      assert.equal(post.status, 400);
-    });
-    it('No serviceType, should 400', async () => {
-      const post = await tryCall('POST', '/missions/', [{
-        client: 'FS',
-        pickupPlace: placeFull.placeId,
-        hireDate: '2020-06-16T01:00:00Z',
-        department: 'NANTERRE2',
-      }]);
-      assert.equal(post.status, 400);
-    });
-    it('No hireDate, should 400', async () => {
-      const post = await tryCall('POST', '/missions/', [{
-        client: 'FS',
-        pickupPlace: placeFull.placeId,
-        serviceType: '*',
-        department: 'NANTERRE2',
-      }]);
-      assert.equal(post.status, 400);
-    });
-    it('Passenger both new and with id, should 400', async () => {
-      const post = await tryCall('POST', '/missions/', [{
-        client: 'FS',
-        pickupPlace: placeFull.placeId,
-        hireDate: '2020-06-16T01:00:00Z',
-        serviceType: '*',
-        department: 'NANTERRE2',
-        passenger: {
-          newPassenger: { civility: 'M', lastName: 'TEST' },
-          passengerId: passMin.passengerId,
-        },
-      }]);
-      assert.equal(post.status, 400);
-    });
-    it('Passenger reference bad, should 412', async () => {
-      const post = await tryCall('POST', '/missions/', [{
-        client: 'FS',
-        pickupPlace: placeFull.placeId,
-        hireDate: '2020-06-16T01:00:00Z',
-        serviceType: '*',
-        department: 'NANTERRE2',
-        passenger: {
-          passengerId: 0,
-        },
-      }]);
-      assert.equal(post.status, 412);
-    });
-    // Impossible to detect, will 201
-    it('PickupPlace incorrect, should 201', async () => {
-      const post = await tryCall('POST', '/missions/', [{
-        client: 'FS',
-        pickupPlace: 'NOPENOPE',
-        hireDate: '2020-06-16T01:00:00Z',
-        serviceType: '*',
-        department: 'NANTERRE2',
-      }]);
-      assert.equal(post.status, 201);
-    });
-    // Impossible to detect, will 201
-    it('Dropoff Place incorrect, should 201', async () => {
-      const post = await tryCall('POST', '/missions/', [{
-        client: 'FS',
-        pickupPlace: placeFull.placeId,
-        dropoffPlace: 'NOPENOPE',
-        hireDate: '2020-06-16T01:00:00Z',
-        serviceType: '*',
-        department: 'NANTERRE2',
-      }]);
-      assert.equal(post.status, 201);
-    });
-    // Impossible to detect, will 201
-    it('Client incorrect, should 201', async () => {
-      const post = await tryCall('POST', '/missions/', [{
-        client: 'NOPENOPE',
-        pickupPlace: placeFull.placeId,
-        hireDate: '2020-06-16T01:00:00Z',
-        serviceType: '*',
-        department: 'NANTERRE2',
-      }, {
-        client: 'FS',
-        pickupPlace: 'NOPENOPE',
-        hireDate: '2020-06-16T01:00:00Z',
-        serviceType: '*',
-        department: 'NANTERRE2',
-      }]);
-      assert.equal(post.status, 201);
-    });
-    it('should 412 when double 412 error', async () => {
-      const post = await tryCall('POST', '/missions/', [{
-        client: 'NOPENOPE',
-        pickupPlace: placeFull.placeId,
-        hireDate: '2020-06-16T01:00:00Z',
-        serviceType: '*',
-        department: 'NANTERRE2',
-      }]);
-      assert.equal(post.status, 412);
-    });
-    it('HireDate incorrect, should 400', async () => {
-      const post = await tryCall('POST', '/missions/', [{
-        client: 'FS',
-        pickupPlace: placeFull.placeId,
-        hireDate: '2020-23-16T01:00:00Z',
-        serviceType: '*',
-        department: 'NANTERRE2',
-      }]);
-      assert.equal(post.status, 400);
-    });
-    it('HireEnd incorrect, should 400', async () => {
-      const post = await tryCall('POST', '/missions/', [{
-        client: 'FS',
-        pickupPlace: placeFull.placeId,
-        hireDate: '2021-09-16T13:30:00Z',
-        hireEnd: '2021-09-16T25:30:00Z',
-        serviceType: '*',
-        department: 'NANTERRE2',
-      }]);
-      assert.equal(post.status, 400);
-    });
-  });
+  // describe('test POST incorrects', () => {
+  //   it('No clientId, should 400', async () => {
+  //     const post = await tryCall('POST', '/missions/', [{
+  //       pickupPlace: placeFull.placeId,
+  //       hireDate: '2020-06-16T01:00:00Z',
+  //       serviceType: '*',
+  //       department: 'NANTERRE2',
+  //     }]);
+  //     assert.equal(post.status, 400);
+  //   });
+  //   it('No pickup place, should 400', async () => {
+  //     const post = await tryCall('POST', '/missions/', [{
+  //       client: 'FS',
+  //       hireDate: '2020-06-16T01:00:00Z',
+  //       serviceType: '*',
+  //       department: 'NANTERRE2',
+  //     }]);
+  //     assert.equal(post.status, 400);
+  //   });
+  //   it('No serviceType, should 400', async () => {
+  //     const post = await tryCall('POST', '/missions/', [{
+  //       client: 'FS',
+  //       pickupPlace: placeFull.placeId,
+  //       hireDate: '2020-06-16T01:00:00Z',
+  //       department: 'NANTERRE2',
+  //     }]);
+  //     assert.equal(post.status, 400);
+  //   });
+  //   it('No hireDate, should 400', async () => {
+  //     const post = await tryCall('POST', '/missions/', [{
+  //       client: 'FS',
+  //       pickupPlace: placeFull.placeId,
+  //       serviceType: '*',
+  //       department: 'NANTERRE2',
+  //     }]);
+  //     assert.equal(post.status, 400);
+  //   });
+  //   it('Passenger both new and with id, should 400', async () => {
+  //     const post = await tryCall('POST', '/missions/', [{
+  //       client: 'FS',
+  //       pickupPlace: placeFull.placeId,
+  //       hireDate: '2020-06-16T01:00:00Z',
+  //       serviceType: '*',
+  //       department: 'NANTERRE2',
+  //       passenger: {
+  //         newPassenger: { civility: 'M', lastName: 'TEST' },
+  //         passengerId: passMin.passengerId,
+  //       },
+  //     }]);
+  //     assert.equal(post.status, 400);
+  //   });
+  //   it('Passenger reference bad, should 412', async () => {
+  //     const post = await tryCall('POST', '/missions/', [{
+  //       client: 'FS',
+  //       pickupPlace: placeFull.placeId,
+  //       hireDate: '2020-06-16T01:00:00Z',
+  //       serviceType: '*',
+  //       department: 'NANTERRE2',
+  //       passenger: {
+  //         passengerId: 0,
+  //       },
+  //     }]);
+  //     assert.equal(post.status, 412);
+  //   });
+  //   // Impossible to detect, will 201
+  //   it('PickupPlace incorrect, should 201', async () => {
+  //     const post = await tryCall('POST', '/missions/', [{
+  //       client: 'FS',
+  //       pickupPlace: 'NOPENOPE',
+  //       hireDate: '2020-06-16T01:00:00Z',
+  //       serviceType: '*',
+  //       department: 'NANTERRE2',
+  //     }]);
+  //     assert.equal(post.status, 201);
+  //   });
+  //   // Impossible to detect, will 201
+  //   it('Dropoff Place incorrect, should 201', async () => {
+  //     const post = await tryCall('POST', '/missions/', [{
+  //       client: 'FS',
+  //       pickupPlace: placeFull.placeId,
+  //       dropoffPlace: 'NOPENOPE',
+  //       hireDate: '2020-06-16T01:00:00Z',
+  //       serviceType: '*',
+  //       department: 'NANTERRE2',
+  //     }]);
+  //     assert.equal(post.status, 201);
+  //   });
+  //   // Impossible to detect, will 201
+  //   it('Client incorrect, should 201', async () => {
+  //     const post = await tryCall('POST', '/missions/', [{
+  //       client: 'NOPENOPE',
+  //       pickupPlace: placeFull.placeId,
+  //       hireDate: '2020-06-16T01:00:00Z',
+  //       serviceType: '*',
+  //       department: 'NANTERRE2',
+  //     }, {
+  //       client: 'FS',
+  //       pickupPlace: 'NOPENOPE',
+  //       hireDate: '2020-06-16T01:00:00Z',
+  //       serviceType: '*',
+  //       department: 'NANTERRE2',
+  //     }]);
+  //     assert.equal(post.status, 201);
+  //   });
+  //   it('should 412 when double 412 error', async () => {
+  //     const post = await tryCall('POST', '/missions/', [{
+  //       client: 'NOPENOPE',
+  //       pickupPlace: placeFull.placeId,
+  //       hireDate: '2020-06-16T01:00:00Z',
+  //       serviceType: '*',
+  //       department: 'NANTERRE2',
+  //     }]);
+  //     assert.equal(post.status, 412);
+  //   });
+  //   it('HireDate incorrect, should 400', async () => {
+  //     const post = await tryCall('POST', '/missions/', [{
+  //       client: 'FS',
+  //       pickupPlace: placeFull.placeId,
+  //       hireDate: '2020-23-16T01:00:00Z',
+  //       serviceType: '*',
+  //       department: 'NANTERRE2',
+  //     }]);
+  //     assert.equal(post.status, 400);
+  //   });
+  //   it('HireEnd incorrect, should 400', async () => {
+  //     const post = await tryCall('POST', '/missions/', [{
+  //       client: 'FS',
+  //       pickupPlace: placeFull.placeId,
+  //       hireDate: '2021-09-16T13:30:00Z',
+  //       hireEnd: '2021-09-16T25:30:00Z',
+  //       serviceType: '*',
+  //       department: 'NANTERRE2',
+  //     }]);
+  //     assert.equal(post.status, 400);
+  //   });
+  // });
 
   describe('test POST', () => {
     it('should POST 1 mission', async () => {
@@ -378,26 +377,46 @@ function testMountMissions() {
     });
   });
 
-  // describe('test PATCH', () => {
-  //   it('PATCH mission short', async () => {
-  //     const patch = await tryCall('PATCH', `/missions/${data2[0].missionId}`, patchShort);
-  //     assert.equal(patch.status, 200);
-  //   });
-  //   it('PATCH mission full with passengerId', async () => {
-  //     const patch = await tryCall('PATCH', `/missions/${data2[1].missionId}`, patchLong);
-  //     assert.equal(patch.status, 200);
-  //   });
-  // });
+  // data1[0].missionId = 1427052;
+  // data2[0].missionId = 1427053;
+  // data2[1].missionId = 1427054;
+  // data2[2].missionId = 1427056;
+  // data2[3].missionId = 1427055;
 
-  // describe('test GET patched missions', () => {
-  //   it('GET mission mini', async () => {
-  //     const get = await tryCall('POST', `/missions/${data2[0].missionId}`);
-  //     assert.deepEqual(get.data, updatedObject(data2[0], patchShort));
+  describe('test PATCH', () => {
+    it('PATCH mission short', async () => {
+      const patch = await tryCall('PATCH', `/missions/${data2[0].missionId}`, patchShort);
+      assert.equal(patch.status, 200);
+    });
+    it('PATCH mission full with passengerId', async () => {
+      const patch = await tryCall('PATCH', `/missions/${data2[1].missionId}`, patchLong);
+      assert.equal(patch.status, 200);
+      expect(patch.data.passengerId).to.be.a('number');
+      // Update passenger
+      patchLong.passenger = patchLong.passenger.newPassenger;
+      patchLong.passenger.passengerId = patch.data.passengerId;
+      expect(patchLong.passenger.passengerId).to.be.a('number');
+    });
+  });
+
+  describe('test GET patched missions', () => {
+    it('GET mission mini', async () => {
+      const get = await tryCall('GET', `/missions/${data2[0].missionId}`);
+      const updated = updatedObject(data2[0], patchShort);
+      const filtered = filterCommonKeys(get.data, updated);
+      assert.deepEqual(filtered, updated);
+    });
+  //   it('GET the mission from data1', async () => {
+  //     const get = await tryCall('GET', `/missions/${data2[1].missionId}`);
+  //     const updated = updatedObject(data2[1], patchLong);
+  //     console.log('updated', updated);
+  //     const filtered = filterCommonKeys(get.data, updated);
+  //     console.log('filtered', filtered);
+  //     assert.deepEqual(filtered, updated);
   //   });
-  //   it('GET mission full with passengerId', async () => {
-  //     const get = await tryCall('POST', `/missions/${data2[1].missionId}`);
-  //     assert.deepEqual(get.data, updatedObject(data2[1], patchLong));
-  //   });
+  });
+
+  // describe('test CANCEL mission', () => {
   // });
 }
 
