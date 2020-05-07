@@ -291,91 +291,91 @@ function testMountMissions() {
   //   });
   // });
 
-  describe('test POST', () => {
-    it('should POST 1 mission', async () => {
-      const post = await tryCall('POST', '/missions/', data1);
-      assert.equal(post.status, 201);
-      assert.equal(post.data.success[0].client, data1[0].client.toUpperCase());
-      assert.equal(post.data.success[0].pickupPlace, data1[0].pickupPlace);
-      assert.equal(post.data.success[0].dropoffPlace, data1[0].dropoffPlace);
-      assert.equal(post.data.success[0].hireDate, data1[0].hireDate);
-      assert.equal(post.data.success[0].hireEnd, data1[0].hireEnd);
-      assert.equal(post.data.success[0].department, data1[0].department);
-      assert.equal(post.data.success[0].serviceType, data1[0].serviceType);
-      assert.equal(post.data.success[0].pax, data1[0].pax);
-      assert.equal(post.data.success[0].travelDetails, data1[0].travelDetails);
-      assert.equal(post.data.success[0].requestedVehicleClass, data1[0].requestedVehicleClass);
-      assert.equal(post.data.success[0].refClient, data1[0].refClient);
-      assert.equal(post.data.success[0].observation, data1[0].observation);
-      // Verify generated numbers
-      expect(post.data.success[0].missionId).to.be.a('number');
-      expect(post.data.success[0].passengerId).to.be.a('number');
-      // add missionId
-      data1[0].missionId = post.data.success[0].missionId;
-      expect(data1[0].missionId).to.be.a('number');
-      // update passenger
-      data1[0].passenger = data1[0].passenger.newPassenger;
-      data1[0].passenger.passengerId = post.data.success[0].passengerId;
-      expect(data1[0].passenger.passengerId).to.be.a('number');
-    });
+  // describe('test POST', () => {
+  //   it('should POST 1 mission', async () => {
+  //     const post = await tryCall('POST', '/missions/', data1);
+  //     assert.equal(post.status, 201);
+  //     assert.equal(post.data.success[0].client, data1[0].client.toUpperCase());
+  //     assert.equal(post.data.success[0].pickupPlace, data1[0].pickupPlace);
+  //     assert.equal(post.data.success[0].dropoffPlace, data1[0].dropoffPlace);
+  //     assert.equal(post.data.success[0].hireDate, data1[0].hireDate);
+  //     assert.equal(post.data.success[0].hireEnd, data1[0].hireEnd);
+  //     assert.equal(post.data.success[0].department, data1[0].department);
+  //     assert.equal(post.data.success[0].serviceType, data1[0].serviceType);
+  //     assert.equal(post.data.success[0].pax, data1[0].pax);
+  //     assert.equal(post.data.success[0].travelDetails, data1[0].travelDetails);
+  //     assert.equal(post.data.success[0].requestedVehicleClass, data1[0].requestedVehicleClass);
+  //     assert.equal(post.data.success[0].refClient, data1[0].refClient);
+  //     assert.equal(post.data.success[0].observation, data1[0].observation);
+  //     // Verify generated numbers
+  //     expect(post.data.success[0].missionId).to.be.a('number');
+  //     expect(post.data.success[0].passengerId).to.be.a('number');
+  //     // add missionId
+  //     data1[0].missionId = post.data.success[0].missionId;
+  //     expect(data1[0].missionId).to.be.a('number');
+  //     // update passenger
+  //     data1[0].passenger = data1[0].passenger.newPassenger;
+  //     data1[0].passenger.passengerId = post.data.success[0].passengerId;
+  //     expect(data1[0].passenger.passengerId).to.be.a('number');
+  //   });
 
-    it('should POST 4 missions', async () => {
-      const post = await tryCall('POST', '/missions/', data2);
-      assert.equal(post.status, 201);
-      for (let i = 0; i < data2.length; i += 1) {
-        assert.equal(post.data.success[i].client, data2[i].client.toUpperCase());
-        assert.equal(post.data.success[i].pickupPlace, data2[i].pickupPlace);
-        assert.equal(post.data.success[i].dropoffPlace, data2[i].dropoffPlace);
-        assert.equal(post.data.success[i].hireDate, data2[i].hireDate);
-        assert.equal(post.data.success[i].hireEnd, data2[i].hireEnd);
-        assert.equal(post.data.success[i].department, data2[i].department);
-        assert.equal(post.data.success[i].serviceType, data2[i].serviceType);
-        assert.equal(post.data.success[i].pax, data2[i].pax);
-        assert.equal(post.data.success[i].destProv, data2[i].destProv);
-        assert.equal(post.data.success[i].missionGroupId, data2[i].missionGroupId);
-        assert.equal(post.data.success[i].requestedVehicleClass, data2[i].requestedVehicleClass);
-        assert.equal(post.data.success[i].modeTVA, data2[i].modeTVA);
-        assert.equal(post.data.success[i].observation, data2[i].observation);
-        assert.equal(post.data.success[i].hireNumber, data2[i].hireNumber);
-        assert.equal(post.data.success[i].bookingNumber, data2[i].bookingNumber);
-        assert.equal(post.data.success[i].refClient, data2[i].refClient);
-        assert.equal(post.data.success[i].internalObservation, data2[i].internalObservation);
-        assert.equal(post.data.success[i].contact, data2[i].contact);
-        assert.equal(post.data.success[i].salesRep, data2[i].salesRep);
+  //   it('should POST 4 missions', async () => {
+  //     const post = await tryCall('POST', '/missions/', data2);
+  //     assert.equal(post.status, 201);
+  //     for (let i = 0; i < data2.length; i += 1) {
+  //       assert.equal(post.data.success[i].client, data2[i].client.toUpperCase());
+  //       assert.equal(post.data.success[i].pickupPlace, data2[i].pickupPlace);
+  //       assert.equal(post.data.success[i].dropoffPlace, data2[i].dropoffPlace);
+  //       assert.equal(post.data.success[i].hireDate, data2[i].hireDate);
+  //       assert.equal(post.data.success[i].hireEnd, data2[i].hireEnd);
+  //       assert.equal(post.data.success[i].department, data2[i].department);
+  //       assert.equal(post.data.success[i].serviceType, data2[i].serviceType);
+  //       assert.equal(post.data.success[i].pax, data2[i].pax);
+  //       assert.equal(post.data.success[i].destProv, data2[i].destProv);
+  //       assert.equal(post.data.success[i].missionGroupId, data2[i].missionGroupId);
+  //       assert.equal(post.data.success[i].requestedVehicleClass, data2[i].requestedVehicleClass);
+  //       assert.equal(post.data.success[i].modeTVA, data2[i].modeTVA);
+  //       assert.equal(post.data.success[i].observation, data2[i].observation);
+  //       assert.equal(post.data.success[i].hireNumber, data2[i].hireNumber);
+  //       assert.equal(post.data.success[i].bookingNumber, data2[i].bookingNumber);
+  //       assert.equal(post.data.success[i].refClient, data2[i].refClient);
+  //       assert.equal(post.data.success[i].internalObservation, data2[i].internalObservation);
+  //       assert.equal(post.data.success[i].contact, data2[i].contact);
+  //       assert.equal(post.data.success[i].salesRep, data2[i].salesRep);
 
-        expect(post.data.success[i].missionId).to.be.a('number');
-        if (data2[i].passenger) expect(post.data.success[i].passengerId).to.be.a('number');
-        // add mission id
-        data2[i].missionId = post.data.success[i].missionId;
-        expect(data2[i].missionId).to.be.a('number');
-        // update passenger
-        if (data2[i].passenger && data2[i].passenger.newPassenger) {
-          data2[i].passenger = data2[i].passenger.newPassenger;
-          data2[i].passenger.passengerId = post.data.success[i].passengerId;
-          expect(data2[i].passenger.passengerId).to.be.a('number');
-        }
-      }
-    });
-  });
+  //       expect(post.data.success[i].missionId).to.be.a('number');
+  //       if (data2[i].passenger) expect(post.data.success[i].passengerId).to.be.a('number');
+  //       // add mission id
+  //       data2[i].missionId = post.data.success[i].missionId;
+  //       expect(data2[i].missionId).to.be.a('number');
+  //       // update passenger
+  //       if (data2[i].passenger && data2[i].passenger.newPassenger) {
+  //         data2[i].passenger = data2[i].passenger.newPassenger;
+  //         data2[i].passenger.passengerId = post.data.success[i].passengerId;
+  //         expect(data2[i].passenger.passengerId).to.be.a('number');
+  //       }
+  //     }
+  //   });
+  // });
 
-  describe('test GET existing missions', () => {
-    it('GET the mission from data1', async () => {
-      const get = await tryCall('GET', `/missions/${data1[0].missionId}`);
-      const filtered = filterCommonKeys(get.data, data1[0]);
-      assert.deepEqual(filtered, data1[0]);
-    });
+  // describe('test GET existing missions', () => {
+  //   it('GET the mission from data1', async () => {
+  //     const get = await tryCall('GET', `/missions/${data1[0].missionId}`);
+  //     const filtered = filterCommonKeys(get.data, data1[0]);
+  //     assert.deepEqual(filtered, data1[0]);
+  //   });
 
-    it('GET all 4 missions from data2', async () => {
-      for (let i = 0; i < data2.length; i += 1) {
-        const get = await tryCall('GET', `/missions/${data2[i].missionId}`);
-        const filtered = filterCommonKeys(get.data, data2[i]);
-        if (filtered.passenger) {
-          filtered.passenger = filterCommonKeys(filtered.passenger, data2[i].passenger);
-        }
-        assert.deepEqual(filtered, data2[i]);
-      }
-    });
-  });
+  //   it('GET all 4 missions from data2', async () => {
+  //     for (let i = 0; i < data2.length; i += 1) {
+  //       const get = await tryCall('GET', `/missions/${data2[i].missionId}`);
+  //       const filtered = filterCommonKeys(get.data, data2[i]);
+  //       if (filtered.passenger) {
+  //         filtered.passenger = filterCommonKeys(filtered.passenger, data2[i].passenger);
+  //       }
+  //       assert.deepEqual(filtered, data2[i]);
+  //     }
+  //   });
+  // });
 
   // data1[0].missionId = 1427052;
   // data2[0].missionId = 1427053;
@@ -383,39 +383,81 @@ function testMountMissions() {
   // data2[2].missionId = 1427056;
   // data2[3].missionId = 1427055;
 
-  describe('test PATCH', () => {
-    it('PATCH mission short', async () => {
-      const patch = await tryCall('PATCH', `/missions/${data2[0].missionId}`, patchShort);
-      assert.equal(patch.status, 200);
-    });
-    it('PATCH mission full with passengerId', async () => {
-      const patch = await tryCall('PATCH', `/missions/${data2[1].missionId}`, patchLong);
-      assert.equal(patch.status, 200);
-      expect(patch.data.passengerId).to.be.a('number');
-      // Update passenger
-      patchLong.passenger = patchLong.passenger.newPassenger;
-      patchLong.passenger.passengerId = patch.data.passengerId;
-      expect(patchLong.passenger.passengerId).to.be.a('number');
-    });
-  });
-
-  describe('test GET patched missions', () => {
-    it('GET mission mini', async () => {
-      const get = await tryCall('GET', `/missions/${data2[0].missionId}`);
-      const updated = updatedObject(data2[0], patchShort);
-      const filtered = filterCommonKeys(get.data, updated);
-      assert.deepEqual(filtered, updated);
-    });
-    it('GET the mission from data1', async () => {
-      const get = await tryCall('GET', `/missions/${data2[1].missionId}`);
-      const updated = updatedObject(data2[1], patchLong);
-      const filtered = filterCommonKeys(get.data, updated);
-      assert.deepEqual(filtered, updated);
-    });
-  });
-
-  // describe('test CANCEL mission', () => {
+  // describe('test PATCH', () => {
+  //   it('PATCH mission short', async () => {
+  //     const patch = await tryCall('PATCH', `/missions/${data2[0].missionId}`, patchShort);
+  //     assert.equal(patch.status, 200);
+  //   });
+  //   it('PATCH mission full with passengerId', async () => {
+  //     const patch = await tryCall('PATCH', `/missions/${data2[1].missionId}`, patchLong);
+  //     assert.equal(patch.status, 200);
+  //     expect(patch.data.passengerId).to.be.a('number');
+  //     // Update passenger
+  //     patchLong.passenger = patchLong.passenger.newPassenger;
+  //     patchLong.passenger.passengerId = patch.data.passengerId;
+  //     expect(patchLong.passenger.passengerId).to.be.a('number');
+  //   });
   // });
+
+  // describe('test GET patched missions', () => {
+  //   it('GET mission mini', async () => {
+  //     const get = await tryCall('GET', `/missions/${data2[0].missionId}`);
+  //     const updated = updatedObject(data2[0], patchShort);
+  //     const filtered = filterCommonKeys(get.data, updated);
+  //     assert.deepEqual(filtered, updated);
+  //   });
+  //   it('GET the mission from data1', async () => {
+  //     const get = await tryCall('GET', `/missions/${data2[1].missionId}`);
+  //     const updated = updatedObject(data2[1], patchLong);
+  //     const filtered = filterCommonKeys(get.data, updated);
+  //     assert.deepEqual(filtered, updated);
+  //   });
+  // });
+
+  describe('test GET many missions', () => {
+    it('GET many missions', async () => {
+      const get = await tryCall('GET', '/missions/', {}, {
+        dayStart: '2020-06-15',
+        dayEnd: '2020-06-18',
+      });
+      get.data.forEach((mission) => {
+        expect(mission.missionId).to.be.a('number');
+        expect(mission.client).to.be.a('string');
+        expect(mission.bookingNumber).to.not.be.an('undefined');
+        expect(mission.hireNumber).to.not.be.an('undefined');
+        expect(mission.pickupPlace).to.be.a('string');
+        expect(mission.hireDate).to.not.be.an('undefined');
+        expect(mission.hireEnd).to.not.be.an('undefined');
+        expect(mission.serviceType).to.be.a('string');
+        expect(mission.serviceLabel).to.not.be.an('undefined');
+        expect(mission.department).to.be.a('string');
+        expect(mission.dropoffPlace).to.not.be.an('undefined');
+        expect(mission.pax).to.not.be.an('undefined');
+        expect(mission.refClient).to.not.be.an('undefined');
+        expect(mission.travelDetails).to.not.be.an('undefined');
+        expect(mission.destProv).to.not.be.an('undefined');
+        expect(mission.observation).to.not.be.an('undefined');
+        expect(mission.requestedVehicleClass).to.not.be.an('undefined');
+        expect(mission.missionGroupId).to.not.be.an('undefined');
+        expect(mission.modeTVA).to.not.be.an('undefined');
+        expect(mission.state).to.not.be.an('undefined');
+        expect(mission.modeTVA).to.not.be.an('undefined');
+        expect(mission.internalObservation).to.not.be.an('undefined');
+        expect(mission.contact).to.not.be.an('undefined');
+        expect(mission.salesRep).to.not.be.an('undefined');
+        expect(mission.transportType).to.not.be.an('undefined');
+        expect(mission.orderCanal).to.not.be.an('undefined');
+        expect(mission.flightTime).to.not.be.an('undefined');
+        expect(mission.driverId).to.not.be.an('undefined');
+        expect(mission.valuationAmountExVAT).to.not.be.an('undefined');
+        expect(mission.valuationAmountInVAT).to.not.be.an('undefined');
+        expect(mission.billedAmountExVAT).to.not.be.an('undefined');
+        expect(mission.valuationAmountInVAT).to.not.be.an('undefined');
+        expect(mission.fareReference).to.not.be.an('undefined');
+        expect(mission.subcontractorId).to.not.be.an('undefined');
+      });
+    });
+  });
 }
 
 /*
@@ -423,7 +465,9 @@ test get many missions
 */
 
 function testUnmountMissions() {
-
+  describe('test CANCEL mission', () => {
+    
+  });
 }
 
 module.exports = { testMountMissions, testUnmountMissions };
