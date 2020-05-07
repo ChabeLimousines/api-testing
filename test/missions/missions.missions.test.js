@@ -406,14 +406,12 @@ function testMountMissions() {
       const filtered = filterCommonKeys(get.data, updated);
       assert.deepEqual(filtered, updated);
     });
-  //   it('GET the mission from data1', async () => {
-  //     const get = await tryCall('GET', `/missions/${data2[1].missionId}`);
-  //     const updated = updatedObject(data2[1], patchLong);
-  //     console.log('updated', updated);
-  //     const filtered = filterCommonKeys(get.data, updated);
-  //     console.log('filtered', filtered);
-  //     assert.deepEqual(filtered, updated);
-  //   });
+    it('GET the mission from data1', async () => {
+      const get = await tryCall('GET', `/missions/${data2[1].missionId}`);
+      const updated = updatedObject(data2[1], patchLong);
+      const filtered = filterCommonKeys(get.data, updated);
+      assert.deepEqual(filtered, updated);
+    });
   });
 
   // describe('test CANCEL mission', () => {
