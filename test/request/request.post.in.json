@@ -1,0 +1,22 @@
+{
+	"externalId": "4444",
+	"request": [{
+		"client": "PDG",
+		"pickupPlace": {
+			"textAddress": "CHABE 91 av Jules Quentin Nanterre"
+		},
+		"dropOffPlace": {
+			"placeId": "CGD"
+		},
+		"hireDate": "2019-11-12T11:45:00Z",
+		"hireEnd": "2019-11-12T16:45:00Z",
+		"typePresta": "TAR",
+		"passenger": {
+			"passengerId": 928565
+		},
+		"pax": 1,
+		"observation": "TEST MISSION",
+		"requestedVehicleClass": "sclass",
+		"contactName": "Giang"
+	}]
+}

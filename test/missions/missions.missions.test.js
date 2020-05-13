@@ -453,18 +453,18 @@ function testMountMissions() {
         expect(mission.orderCanal).to.not.be.an('undefined');
         expect(mission.flightTime).to.not.be.an('undefined');
         expect(mission.driverId).to.not.be.an('undefined');
-        expect(mission.valuationAmountExVAT).to.not.be.an('undefined');
-        expect(mission.valuationAmountInVAT).to.not.be.an('undefined');
         expect(mission.currentAmountExVAT).to.not.be.an('undefined');
         expect(mission.currentAmountInVAT).to.not.be.an('undefined');
+        expect(mission.billedAmountExVAT).to.not.be.an('undefined');
+        expect(mission.billedAmountInVAT).to.not.be.an('undefined');
         expect(mission.fareReference).to.not.be.an('undefined');
         expect(mission.subcontractorId).to.not.be.an('undefined');
 
         // Vehicle info
         expect(mission.vehicle).to.not.be.an('undefined');
-        expect(mission.vehicle.vehicleId).to.be.a('number');
-        expect(mission.vehicle.modelName).to.be.a('string');
-        expect(mission.vehicle.registration).to.not.be.a('string');
+        expect(mission.vehicle.vehicleId).to.not.be.an('undefined');
+        expect(mission.vehicle.modelName).to.not.be.an('undefined');
+        expect(mission.vehicle.registration).to.not.be.an('undefined');
       });
     });
   });
