@@ -13,7 +13,7 @@ Object.keys(testModelUpper)
 
 function testMountModels() {
   const testUpdate = {
-    category: 'D',
+    category: 'DAB',
     make: 'RENAULT',
   };
 
