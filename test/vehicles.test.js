@@ -5,18 +5,18 @@ const { testMountUnavs, testUnmountUnavs } = require('./vehicles/unavailabilitie
 describe('Mount Models', () => {
   testMountModels();
 });
-describe('Mount Vehicles', () => {
-  testMountVehicles();
-});
-describe('Mount Unavailabilities', () => {
-  testMountUnavs();
-});
-describe('Unmount Unavailabilities', () => {
-  testUnmountUnavs();
-});
-describe('Unmount Vehicles', () => {
-  testUnmountVehicles();
-});
+// describe('Mount Vehicles', () => {
+//   testMountVehicles();
+// });
+// describe('Mount Unavailabilities', () => {
+//   testMountUnavs();
+// });
+// describe('Unmount Unavailabilities', () => {
+//   testUnmountUnavs();
+// });
+// describe('Unmount Vehicles', () => {
+//   testUnmountVehicles();
+// });
 describe('unmount Models', () => {
   testUnmountModels();
 });
