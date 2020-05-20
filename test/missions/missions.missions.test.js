@@ -116,6 +116,7 @@ const patchLong = {
   hireDate: '2020-06-17T01:00:00.000Z',
   hireEnd: '2020-06-18T03:15:00.000Z',
   comment: 'Un joli commentaire',
+  flightTime: '2020-06-20T20:00:00.000Z',
   salesRep: 'INTERFACE',
   destProv: 'Lyon St Ex',
   department: 'NANTERRE2',
@@ -160,6 +161,27 @@ const patchShort = {
       code: 'ANGLAIS A2',
     },
   ],
+};
+
+// To patch data2[0]
+const patchNullValues = {
+  refClient: null,
+  comment: 'Need to reset some values',
+  travelDetails: null,
+  destProv: null,
+  flightTime: null,
+  observation: null,
+  internalObservation: null,
+};
+
+const patchNullValues2 = {
+  refClient: 'not null',
+  comment: 'Need to reset some values',
+  travelDetails: 'not null',
+  destProv: 'not null',
+  flightTime: '2020-06-17T01:00:00.000Z',
+  observation: 'not null',
+  internalObservation: 'not null',
 };
 
 // To cancel data2[0]
@@ -502,6 +524,10 @@ function testMountMissions() {
       assert.equal(patchLong.contact, get.data.contact);
       assert.equal(patchLong.serviceLabel, get.data.serviceLabel);
       assert.equal(
+        new Date(patchLong.flightTime).toTimeString(),
+        new Date(get.data.flightTime).toTimeString(),
+      );
+      assert.equal(
         patchLong.requestedVehicleClass,
         get.data.requestedVehicleClass,
       );
@@ -540,6 +566,43 @@ function testMountMissions() {
           (d) => d.code === patchShort.driverAbilities[0].code,
         ).code,
       );
+    });
+
+    it('PATCH mission with null values', async () => {
+      const patch = await tryCall(
+        'PATCH',
+        `/missions/${data2[0].missionId}`,
+        patchNullValues,
+      );
+
+      const get = await tryCall('GET', `/missions/${data2[0].missionId}`);
+      assert.equal(patch.status, 200);
+      assert.equal(patchNullValues.refClient, get.data.refClient);
+      assert.equal(patchNullValues.travelDetails, get.data.travelDetails);
+      assert.equal(patchNullValues.destProv, get.data.destProv);
+      assert.equal(patchNullValues.flightTime, get.data.flightTime);
+      assert.equal(patchNullValues.observation, get.data.observation);
+      assert.equal(patchNullValues.internalObservation, get.data.observation);
+    });
+
+    it('PATCH same mission again with not null values', async () => {
+      const patch = await tryCall(
+        'PATCH',
+        `/missions/${data2[0].missionId}`,
+        patchNullValues2,
+      );
+
+      const get = await tryCall('GET', `/missions/${data2[0].missionId}`);
+      assert.equal(patch.status, 200);
+      assert.equal(patchNullValues2.refClient, get.data.refClient);
+      assert.equal(patchNullValues2.travelDetails, get.data.travelDetails);
+      assert.equal(patchNullValues2.destProv, get.data.destProv);
+      assert.equal(
+        new Date(patchNullValues2.flightTime).toTimeString(),
+        new Date(get.data.flightTime).toTimeString(),
+      );
+      assert.equal(patchNullValues2.observation, get.data.observation);
+      assert.equal(patchNullValues2.internalObservation, get.data.observation);
     });
   });
 
