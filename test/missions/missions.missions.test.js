@@ -55,6 +55,9 @@ const data2 = [
     internalObservation: 'Internal secret message',
     contact: 'Jean-Robert',
     salesRep: 'INTERFACE',
+    advertisedPriceExclVAT: 150.9,
+    advertisedPriceInclVAT: 181.08,
+    advertisedPriceInfos: 'Some additionnal infos',
     passenger: {
       newPassenger: {
         civility: 'Mme',
@@ -83,6 +86,9 @@ const data2 = [
     requestedVehicleClass: 'FEDEX',
     observation: 'data2 mission3',
     refClient: 'refClient1',
+    advertisedPriceExclVAT: 139,
+    advertisedPriceInclVAT: 200,
+    advertisedPriceInfos: 'Price announced to client',
     passenger: {
       passengerId: passFull.passengerId,
     },
@@ -128,6 +134,9 @@ const patchLong = {
   modeTVA: false,
   pax: 10,
   orderCanal: 'ZENBOOKING',
+  advertisedPriceExclVAT: 150,
+  advertisedPriceInclVAT: 300,
+  advertisedPriceInfos: 'Infos',
   passenger: {
     newPassenger: {
       civility: 'M',
@@ -172,6 +181,9 @@ const patchNullValues = {
   flightTime: null,
   observation: null,
   internalObservation: null,
+  advertisedPriceExclVAT: 0,
+  advertisedPriceInclVAT: 0,
+  advertisedPriceInfos: null,
 };
 
 const patchNullValues2 = {
@@ -182,6 +194,9 @@ const patchNullValues2 = {
   flightTime: '2020-06-17T01:00:00.000Z',
   observation: 'not null',
   internalObservation: 'not null',
+  advertisedPriceExclVAT: 1,
+  advertisedPriceInclVAT: 2.9,
+  advertisedPriceInfos: 'not null',
 };
 
 // To cancel data2[0]
@@ -458,6 +473,10 @@ function testMountMissions() {
         );
         assert.equal(post.data.success[i].contact, data2[i].contact);
         assert.equal(post.data.success[i].salesRep, data2[i].salesRep);
+        assert.equal(
+          post.data.success[i].advertisedPriceExclVAT,
+          data2[i].advertisedPriceExclVAT,
+        );
 
         expect(post.data.success[i].missionId).to.be.a('number');
         if (data2[i].passenger) {
@@ -524,6 +543,18 @@ function testMountMissions() {
       assert.equal(patchLong.contact, get.data.contact);
       assert.equal(patchLong.serviceLabel, get.data.serviceLabel);
       assert.equal(
+        patchLong.advertisedPriceExclVAT,
+        get.data.advertisedPriceExclVAT,
+      );
+      assert.equal(
+        patchLong.advertisedPriceInclVAT,
+        get.data.advertisedPriceInclVAT,
+      );
+      assert.equal(
+        patchLong.advertisedPriceInfos,
+        get.data.advertisedPriceInfos,
+      );
+      assert.equal(
         new Date(patchLong.flightTime).toTimeString(),
         new Date(get.data.flightTime).toTimeString(),
       );
@@ -583,6 +614,18 @@ function testMountMissions() {
       assert.equal(patchNullValues.flightTime, get.data.flightTime);
       assert.equal(patchNullValues.observation, get.data.observation);
       assert.equal(patchNullValues.internalObservation, get.data.observation);
+      assert.equal(
+        patchNullValues.advertisedPriceExclVAT,
+        get.data.advertisedPriceExclVAT,
+      );
+      assert.equal(
+        patchNullValues.advertisedPriceInclVAT,
+        get.data.advertisedPriceInclVAT,
+      );
+      assert.equal(
+        patchNullValues.advertisedPriceInfos,
+        get.data.advertisedPriceInfos,
+      );
     });
 
     it('PATCH same mission again with not null values', async () => {
@@ -603,6 +646,18 @@ function testMountMissions() {
       );
       assert.equal(patchNullValues2.observation, get.data.observation);
       assert.equal(patchNullValues2.internalObservation, get.data.observation);
+      assert.equal(
+        patchNullValues2.advertisedPriceExclVAT,
+        get.data.advertisedPriceExclVAT,
+      );
+      assert.equal(
+        patchNullValues2.advertisedPriceInclVAT,
+        get.data.advertisedPriceInclVAT,
+      );
+      assert.equal(
+        patchNullValues2.advertisedPriceInfos,
+        get.data.advertisedPriceInfos,
+      );
     });
   });
 
