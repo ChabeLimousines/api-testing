@@ -4,12 +4,12 @@ const tryCall = require('../../utils/tryCall.utils');
 const {
   filterCommonKeys,
 } = require('../../utils/objects.utils');
-// const { passFull, passMin } = require('./passenger.missions.test');
-// const { placeFull, placeMin } = require('./places.missions.test');
-const placeFull = { placeId: 'CDG' };
-const placeMin = { placeId: 'CDG' };
-const passFull = { passengerId: 928565 };
-const passMin = { passengerId: 928565 };
+const { passFull, passMin } = require('./passenger.missions.test');
+const { placeFull, placeMin } = require('./places.missions.test');
+// const placeFull = { placeId: 'CDG' };
+// const placeMin = { placeId: 'CDG' };
+// const passFull = { passengerId: 928565 };
+// const passMin = { passengerId: 928565 };
 
 const data1 = [
   {
