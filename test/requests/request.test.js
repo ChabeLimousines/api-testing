@@ -1,5 +1,7 @@
 const assert = require('assert');
 const { expect } = require('chai');
+const fs = require('fs');
+const path = require('path');
 const tryCall = require('../../utils/tryCall.utils');
 const {
   filterCommonKeys,
@@ -11,7 +13,12 @@ const placeMin = { placeId: 'CDG' };
 const passFull = { passengerId: 928565 };
 const passMin = { passengerId: 928565 };
 
-const requestPostIn = JSON.readFileSync('./data/request.post.in.json');
+const requestPostIn = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'request.post.in.json'), 'utf8'));
+console.log(requestPostIn);
+// requestPostIn.dropOffPlace.placeId = placeFull.placeId;
+// requestPostIn.pickUpPlace.placeId = placeMin.placeId;
+requestPostIn.request[0].passenger.passengerId = passFull;
+requestPostIn.request[0].passenger.passengerId = passMin;
 
 
 function testMountRequest() {
@@ -21,11 +28,11 @@ function testMountRequest() {
       assert.equal(getVoid.status, 404);
     });
     it('POST update should return a 404', async () => {
-      const getVoid = await tryCall('GET', '/requests/0/update');
+      const getVoid = await tryCall('POST', '/requests/0/update');
       assert.equal(getVoid.status, 404);
     });
-    it('POST cancell should return a 404', async () => {
-      const getVoid = await tryCall('GET', '/requests/0/cancel');
+    it('POST cancel should return a 404', async () => {
+      const getVoid = await tryCall('POST', '/requests/0/cancel');
       assert.equal(getVoid.status, 404);
     });
   });
@@ -60,4 +67,10 @@ function testMountRequest() {
   });
 }
 
-module.exports = testMountRequest;
+function testUnmountRequest() {
+
+}
+module.exports = {
+  testMountRequest,
+  testUnmountRequest,
+};
