@@ -1,7 +1,7 @@
 {
 	"externalId": "4444",
+	"client": "PDG",
 	"request": [{
-		"client": "PDG",
 		"pickupPlace": {
 			"textAddress": "CHABE 91 av Jules Quentin Nanterre"
 		},
