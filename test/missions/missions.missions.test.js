@@ -677,11 +677,11 @@ describe('test GET many missions', () => {
   it('GET many missions', async () => {
     const get = await tryCall(
       'GET',
-      '/missions/',
+      '/missions',
       {},
       {
-        dayStart: '2020-06-15',
-        dayEnd: '2020-06-18',
+        dayStart: '2020-06-01',
+        dayEnd: '2020-06-03',
       },
     );
     get.data.forEach((mission) => {
@@ -712,13 +712,15 @@ describe('test GET many missions', () => {
       expect(mission.transportType).to.not.be.an('undefined');
       expect(mission.orderCanal).to.not.be.an('undefined');
       expect(mission.flightTime).to.not.be.an('undefined');
-      expect(mission.driverId).to.not.be.an('undefined');
+      expect(mission.driverId).to.be.an('undefined');
       expect(mission.currentAmountExVAT).to.not.be.an('undefined');
       expect(mission.currentAmountInVAT).to.not.be.an('undefined');
       expect(mission.billedAmountExVAT).to.not.be.an('undefined');
       expect(mission.billedAmountInVAT).to.not.be.an('undefined');
       expect(mission.fareReference).to.not.be.an('undefined');
       expect(mission.subcontractorId).to.not.be.an('undefined');
+      expect(mission.clientInstructions).to.be.an('array');
+      expect(mission.driverAbilities).to.be.an('array');
 
       // Vehicle info
       expect(mission.vehicle).to.not.be.an('undefined');
