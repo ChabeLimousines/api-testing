@@ -451,6 +451,15 @@ function testMountMissions() {
   });
 
   describe('test PATCH', () => {
+    it('Patch should 400 when not a single Body Item', async () => {
+      const patch = await tryCall(
+        'PATCH',
+        `/missions/${data2[0].missionId}`,
+        {},
+      );
+      assert.equal(patch.status, 400);
+    });
+
     it('PATCH mission short', async () => {
       const patch = await tryCall(
         'PATCH',
@@ -458,7 +467,9 @@ function testMountMissions() {
         patchLong,
       );
       assert.equal(patch.status, 200);
+    });
 
+    it('Should return matched item', async () => {
       const get = await tryCall('GET', `/missions/${data2[0].missionId}`);
       assert.equal(patchLong.serviceType, get.data.serviceType);
       assert.equal(patchLong.client, get.data.client);
@@ -500,9 +511,11 @@ function testMountMissions() {
         `/missions/${data2[0].missionId}`,
         patchShort,
       );
-
-      const get = await tryCall('GET', `/missions/${data2[0].missionId}`);
       assert.equal(patch.status, 200);
+    });
+
+    it('should get matched mission short', async () => {
+      const get = await tryCall('GET', `/missions/${data2[0].missionId}`);
       assert.equal(patchLong.contact, get.data.contact);
       assert.equal(patchLong.serviceLabel, get.data.serviceLabel);
       assert.equal(patchLong.hireDate, get.data.hireDate);
