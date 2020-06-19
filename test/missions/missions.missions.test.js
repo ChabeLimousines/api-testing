@@ -237,7 +237,9 @@ function testMountMissions() {
       assert.equal(getVoid.status, 404);
     });
     it('patch should return a 404', async () => {
-      const getVoid = await tryCall('PATCH', '/missions/0');
+      const getVoid = await tryCall('PATCH', '/missions/0', {
+        contact: 'Pierre Dupont',
+      });
       assert.equal(getVoid.status, 404);
     });
   });
