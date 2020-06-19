@@ -113,56 +113,60 @@ function testMountRequest() {
     it('Should find this request when get by client', async () => {
       const getMany = await tryCall('GET', '/requests/', {}, { clients: `${client},FS` });
       assert.equal(getMany.status, 200);
-      console.log(getMany.data);
       expect([{ a: 'a', b: 'b' }, { c: 'c', d: 'd' }]).containSubset([{ c: 'c' }]);
-      expect(getMany.data).containSubset([{ requestId: requestPostIn.requestId/*'5edd2238a4fd8d012c3fadf6'*/ }]);
+      expect(getMany.data).containSubset([{ requestId: requestPostIn.requestId }]);
     });
   });
 
   describe('Incorrect uses of good request', () => {
     it('GET without a client should 400', async () => {
-      const getVoid = await tryCall('GET', `/requests/${requestPostIn.idRequest}`);
+      const getVoid = await tryCall('GET', `/requests/${requestPostIn.requestId}`);
       assert.equal(getVoid.status, 400);
     });
   });
 
-  // describe('add an update request', () => {
-  //   it('Should send an Update Request', async () => {
-  //     const postUpdate = await tryCall('POST', `/requests/${requestPostIn.idRequest}`, requestUpdate, { client });
-  //     assert.equal(postUpdate.status, 201);
-  //     assert.equal(postUpdate.data.requestId, requestPostIn.idRequest);
-  //   });
-  //   it('Should get this request by RequestId', async () => {
-  //     const getRequest = await tryCall('GET', `/requests/${requestPostIn.requestId}`, {}, { client });
-  //     assert.equal(getRequest.status, 200);
-  //     assert.equal(getRequest.data.externalId, requestPostIn.externalId);
-  //     assert.equal(getRequest.data.requestId, requestPostIn.requestId);
-  //     assert.equal(getRequest.data.tempOBid, requestPostIn.tempOBid);
-  //     assert.equal(getRequest.data.status, 0);
-  //     expect(getRequest.data.modifRequest).to.be.an('array');
-  //     expect(getRequest.data.modifRequest).to.have.length(1);
-  //     expect(getRequest.data.modifRequest[1].contactName)
-  //       .to.equal(requestUpdate.contactName);
-  //     expect(getRequest.data.modifRequest[1].dateSubmission).to.be.a('string');
-  //     expect(getRequest.data.modifRequest[1].dropOffPlace).to.be.an('object');
-  //     expect(getRequest.data.modifRequest[1].hireDate).to.equal(requestUpdate.hireDate);
-  //     expect(getRequest.data.modifRequest[1].hireEnd).to.equal(requestUpdate.hireEnd);
-  //     expect(getRequest.data.modifRequest[1].modifRequestId).to.be.a('string');
-  //     expect(getRequest.data.modifRequest[1].observation)
-  //       .to.equal(requestUpdate.observation);
-  //     expect(getRequest.data.modifRequest[1].passenger).to.be.an('object');
-  //     expect(getRequest.data.modifRequest[1].passenger.passengerId)
-  //       .to.equal(requestUpdate.passengerId);
-  //     expect(getRequest.data.modifRequest[1].pax).to.equal(requestUpdate.pax);
-  //     expect(getRequest.data.modifRequest[1].pickupPlace).to.be.an('object');
-  //     expect(getRequest.data.modifRequest[1].pickupPlace.textAddress)
-  //       .to.equal(requestUpdate.pickupPlace.textAddress);
-  //     expect(getRequest.data.modifRequest[1].requestedVehicleClass)
-  //       .to.equal(requestUpdate.requestedVehicleClass);
-  //     expect(getRequest.data.modifRequest[1].status).to.equal(0);
-  //     expect(getRequest.data.modifRequest[1].typeModifRequest).to.equal(1);
-  //   });
-  // });
+  describe('add an update request', () => {
+    it('Should send an Update Request', async () => {
+      const postUpdate = await tryCall('POST', `/requests/${requestPostIn.requestId}/modify`, requestUpdate, { client });
+      assert.equal(postUpdate.status, 201);
+      assert.equal(postUpdate.data.requestId, requestPostIn.requestId);
+    });
+    it('Should get this request by RequestId', async () => {
+      const getRequest = await tryCall('GET', `/requests/${requestPostIn.requestId}`, {}, { client });
+      assert.equal(getRequest.status, 200);
+      assert.equal(getRequest.data.externalId, requestPostIn.externalId);
+      assert.equal(getRequest.data.requestId, requestPostIn.requestId);
+      assert.equal(getRequest.data.tempOBid, requestPostIn.tempOBid);
+      assert.equal(getRequest.data.status, 0);
+      expect(getRequest.data.modifRequest).to.be.an('array');
+      expect(getRequest.data.modifRequest).to.have.length(2);
+      expect(getRequest.data.modifRequest[1].contactName)
+        .to.equal(requestUpdate.contactName);
+      expect(getRequest.data.modifRequest[1].dateSubmission).to.be.a('string');
+      expect(getRequest.data.modifRequest[1].dropOffPlace).to.be.an('object');
+      expect(getRequest.data.modifRequest[1].hireDate).to.equal(requestUpdate.hireDate);
+      expect(getRequest.data.modifRequest[1].hireEnd).to.equal(requestUpdate.hireEnd);
+      expect(getRequest.data.modifRequest[1].modifRequestId).to.be.a('string');
+      expect(getRequest.data.modifRequest[1].observation)
+        .to.equal(requestUpdate.observation);
+      expect(getRequest.data.modifRequest[1].passenger).to.be.an('object');
+      expect(getRequest.data.modifRequest[1].passenger.passengerId)
+        .to.equal(requestUpdate.passengerId);
+      expect(getRequest.data.modifRequest[1].pax).to.equal(requestUpdate.pax);
+      expect(getRequest.data.modifRequest[1].pickupPlace).to.be.an('object');
+      expect(getRequest.data.modifRequest[1].pickupPlace.textAddress)
+        .to.equal(requestUpdate.pickupPlace.textAddress);
+      expect(getRequest.data.modifRequest[1].requestedVehicleClass)
+        .to.equal(requestUpdate.requestedVehicleClass);
+      expect(getRequest.data.modifRequest[1].status).to.equal(0);
+      expect(getRequest.data.modifRequest[1].typeModifRequest).to.equal(1);
+    });
+  });
+
+  // TODO test avec textAddress et placeId => error
+  // TODO test avec placeId incorrect
+  // TODO test avec 
+  // TODO idModifRequest pas _id
 }
 
 function testUnmountRequest() {
