@@ -165,12 +165,31 @@ function testMountRequest() {
 
   // TODO test avec textAddress et placeId => error
   // TODO test avec placeId incorrect
-  // TODO test avec 
   // TODO idModifRequest pas _id
 }
 
 function testUnmountRequest() {
-
+  describe('add an cancel request', () => {
+    it('Should send an Cancel Request', async () => {
+      const postCancel = await tryCall('POST', `/requests/${requestPostIn.requestId}/cancel`, {}, { client });
+      assert.equal(postCancel.status, 201);
+      assert.equal(postCancel.data.requestId, requestPostIn.requestId);
+    });
+    it('Should get this request by RequestId', async () => {
+      const getRequest = await tryCall('GET', `/requests/${requestPostIn.requestId}`, {}, { client });
+      assert.equal(getRequest.status, 200);
+      assert.equal(getRequest.data.externalId, requestPostIn.externalId);
+      assert.equal(getRequest.data.requestId, requestPostIn.requestId);
+      assert.equal(getRequest.data.tempOBid, requestPostIn.tempOBid);
+      assert.equal(getRequest.data.status, 2);
+      expect(getRequest.data.modifRequest).to.be.an('array');
+      expect(getRequest.data.modifRequest).to.have.length(3);
+      expect(getRequest.data.modifRequest[2].dateSubmission).to.be.a('string');
+      expect(getRequest.data.modifRequest[2].modifRequestId).to.be.a('string');
+      expect(getRequest.data.modifRequest[2].status).to.equal(0);
+      expect(getRequest.data.modifRequest[2].typeModifRequest).to.equal(2);
+    });
+  });
 }
 
 module.exports = {
