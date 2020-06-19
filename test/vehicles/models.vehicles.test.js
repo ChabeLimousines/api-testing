@@ -74,7 +74,12 @@ function testMountModels() {
 function testUnmountModels() {
   describe('DELETE', () => {
     it('should delete model', async () => {
-      const delModel = await tryCall('DELETE', `/vehicles/models/${testModel.name}`);
+      const delModel = await tryCall(
+        'DELETE',
+        `/vehicles/models/${testModel.name}`,
+        {},
+        { force: true },
+      );
       assert.equal(delModel.data.message, `Model ${testModelUpper.name} DELETE success`);
     });
   });

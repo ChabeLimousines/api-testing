@@ -118,8 +118,12 @@ function testMountUnavs() {
 function testUnmountUnavs() {
   describe('DELETE', () => {
     it('should delete unav', async () => {
-      const delVehi = await tryCall('DELETE',
-        `/vehicles/${testVehi.vehicleId}/unavailabilities/${testUnav.idUnavailability}`);
+      const delVehi = await tryCall(
+        'DELETE',
+        `/vehicles/${testVehi.vehicleId}/unavailabilities/${testUnav.idUnavailability}`,
+        {},
+        { force: true },
+      );
       assert.equal(delVehi.data.message, 'Unavailability succesffully removed');
     });
   });
