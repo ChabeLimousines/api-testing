@@ -1,6 +1,7 @@
 const assert = require('assert');
 const { expect } = require('chai');
 const tryCall = require('../../utils/tryCall.utils');
+<<<<<<< HEAD
 const { filterCommonKeys } = require('../../utils/objects.utils');
 // const { passFull, passMin } = require('./passenger.missions.test');
 // const { placeFull, placeMin } = require('./places.missions.test');
@@ -8,6 +9,17 @@ const placeFull = { placeId: 'CDG' };
 const placeMin = { placeId: 'CDG' };
 const passFull = { passengerId: 928565 };
 const passMin = { passengerId: 928565 };
+=======
+const {
+  filterCommonKeys,
+} = require('../../utils/objects.utils');
+const { passFull, passMin } = require('./passenger.missions.test');
+const { placeFull, placeMin } = require('./places.missions.test');
+// const placeFull = { placeId: 'CDG' };
+// const placeMin = { placeId: 'CDG' };
+// const passFull = { passengerId: 928565 };
+// const passMin = { passengerId: 928565 };
+>>>>>>> testRequest
 
 const data1 = [
   {
@@ -520,14 +532,25 @@ function testMountMissions() {
   });
 
   describe('test PATCH', () => {
-    it('PATCH mission long', async () => {
+    it('Patch should 400 when not a single Body Item', async () => {
+      const patch = await tryCall(
+        'PATCH',
+        `/missions/${data2[0].missionId}`,
+        {},
+      );
+      assert.equal(patch.status, 400);
+    });
+
+    it('PATCH mission short', async () => {
       const patch = await tryCall(
         'PATCH',
         `/missions/${data2[0].missionId}`,
         patchLong,
       );
       assert.equal(patch.status, 200);
+    });
 
+    it('Should return matched item', async () => {
       const get = await tryCall('GET', `/missions/${data2[0].missionId}`);
       assert.equal(patchLong.serviceType, get.data.serviceType);
       assert.equal(patchLong.client, get.data.client);
@@ -585,14 +608,24 @@ function testMountMissions() {
         `/missions/${data2[0].missionId}`,
         patchShort,
       );
+      assert.equal(patch.status, 200);
+    });
 
+    it('should get matched mission short', async () => {
       const get = await tryCall('GET', `/missions/${data2[0].missionId}`);
+<<<<<<< HEAD
       assert.equal(patch.status, 200);
       assert.equal(patchShort.contact, get.data.contact);
       assert.equal(patchShort.serviceLabel, get.data.serviceLabel);
       assert.equal(patchShort.hireDate, get.data.hireDate);
       assert.equal(patchShort.subcontractorId, get.data.subcontractorId);
       assert.equal(patchShort.orderCanal, get.data.orderCanal);
+=======
+      assert.equal(patchLong.contact, get.data.contact);
+      assert.equal(patchLong.serviceLabel, get.data.serviceLabel);
+      assert.equal(patchLong.hireDate, get.data.hireDate);
+      assert.equal(patchLong.orderCanal, get.data.orderCanal);
+>>>>>>> testRequest
       assert.equal(
         patchShort.driverAbilities[0].code,
         get.data.driverAbilities.find(

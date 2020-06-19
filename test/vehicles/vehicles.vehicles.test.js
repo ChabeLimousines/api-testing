@@ -87,7 +87,7 @@ function testMountVehicles() {
 function testUnmountVehicles() {
   describe('DELETE', () => {
     it('should delete model or the ID is free', async () => {
-      const delVehi = await tryCall('DELETE', `/vehicles/${testVehi.vehicleId}`);
+      const delVehi = await tryCall('DELETE', `/vehicles/${testVehi.vehicleId}`, {}, { force: true });
       assert(delVehi.data.message === 'Vehicle deleted');
     });
   });

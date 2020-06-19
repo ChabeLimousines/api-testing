@@ -1,0 +1,17 @@
+{
+	"observation": "TEST update state 4444",
+	"pickupPlace": {
+		"textAddress": "CHABE 91 av Jules Quentin Nanterre"
+	},
+	"hireDate": "2019-11-13T10:45:00.000Z",
+	"hireEnd": "2019-11-13T12:45:00.000Z",
+	"passenger": {
+		"newPassenger": {
+			"civility": "Mme",
+			"lastName": "Gros test"
+		}
+	},
+	"pax": 2,
+	"requestedVehicleClass": "eclass",
+	"contactName": "Elie"
+}
