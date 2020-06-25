@@ -479,15 +479,7 @@ function testMountMissions() {
       assert.deepEqual(filtered, data1[0]);
     });
 
-    it('GET an existing mission in DB having a onroad status', async () => {
-      const getStatus = await tryCall('GET', '/missions/932962/onroad-status');
-      expect(getStatus.data.isDriverAtPickupLocation).to.be.a('boolean');
-      expect(getStatus.data.passengerPickedUp).to.be.a('boolean');
-      expect(getStatus.data.passengerDroppedOff).to.be.a('boolean');
-      expect(getStatus.data.missionFinished).to.be.a('boolean');
-    });
-
-    it('GET all 4 missions from data2 with history and null onroad status', async () => {
+    it('GET all 4 missions from data2 with history', async () => {
       for (let i = 0; i < data2.length; i += 1) {
         const get = await tryCall('GET', `/missions/${data2[i].missionId}`);
         const filtered = filterCommonKeys(get.data, data2[i]);
@@ -495,13 +487,11 @@ function testMountMissions() {
           filtered.passenger = filterCommonKeys(filtered.passenger, data2[i].passenger);
         }
         assert.deepEqual(filtered, data2[i]);
+        assert.equal(get.data.onRoadStatus, null);
 
         const getHistory = await tryCall('GET', `/missions/${data2[i].missionId}/history`);
         assert.equal(getHistory.status, 200);
         expect(getHistory.data).to.have.length.above(0);
-
-        const getONRstatus = await tryCall('GET', `/missions/${data2[i].missionId}/onroad-status`);
-        assert.equal(getONRstatus.status, 404);
       }
     });
   });
