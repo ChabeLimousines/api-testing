@@ -1,25 +1,9 @@
 const assert = require('assert');
 const { expect } = require('chai');
 const tryCall = require('../../utils/tryCall.utils');
-<<<<<<< HEAD
 const { filterCommonKeys } = require('../../utils/objects.utils');
-// const { passFull, passMin } = require('./passenger.missions.test');
-// const { placeFull, placeMin } = require('./places.missions.test');
-const placeFull = { placeId: 'CDG' };
-const placeMin = { placeId: 'CDG' };
-const passFull = { passengerId: 928565 };
-const passMin = { passengerId: 928565 };
-=======
-const {
-  filterCommonKeys,
-} = require('../../utils/objects.utils');
 const { passFull, passMin } = require('./passenger.missions.test');
 const { placeFull, placeMin } = require('./places.missions.test');
-// const placeFull = { placeId: 'CDG' };
-// const placeMin = { placeId: 'CDG' };
-// const passFull = { passengerId: 928565 };
-// const passMin = { passengerId: 928565 };
->>>>>>> testRequest
 
 const data1 = [
   {
@@ -431,10 +415,7 @@ function testMountMissions() {
       assert.equal(post.data.success[0].serviceType, data1[0].serviceType);
       assert.equal(post.data.success[0].pax, data1[0].pax);
       assert.equal(post.data.success[0].travelDetails, data1[0].travelDetails);
-      assert.equal(
-        post.data.success[0].requestedVehicleClass,
-        data1[0].requestedVehicleClass,
-      );
+      assert.equal(post.data.success[0].requestedVehicleClass, data1[0].requestedVehicleClass);
       assert.equal(post.data.success[0].refClient, data1[0].refClient);
       assert.equal(post.data.success[0].observation, data1[0].observation);
       // Verify generated numbers
@@ -453,10 +434,7 @@ function testMountMissions() {
       const post = await tryCall('POST', '/missions/', data2);
       assert.equal(post.status, 201);
       for (let i = 0; i < data2.length; i += 1) {
-        assert.equal(
-          post.data.success[i].client,
-          data2[i].client.toUpperCase(),
-        );
+        assert.equal(post.data.success[i].client, data2[i].client.toUpperCase());
         assert.equal(post.data.success[i].pickupPlace, data2[i].pickupPlace);
         assert.equal(post.data.success[i].dropoffPlace, data2[i].dropoffPlace);
         assert.equal(post.data.success[i].hireDate, data2[i].hireDate);
@@ -465,32 +443,17 @@ function testMountMissions() {
         assert.equal(post.data.success[i].serviceType, data2[i].serviceType);
         assert.equal(post.data.success[i].pax, data2[i].pax);
         assert.equal(post.data.success[i].destProv, data2[i].destProv);
-        assert.equal(
-          post.data.success[i].missionGroupId,
-          data2[i].missionGroupId,
-        );
-        assert.equal(
-          post.data.success[i].requestedVehicleClass,
-          data2[i].requestedVehicleClass,
-        );
+        assert.equal(post.data.success[i].missionGroupId, data2[i].missionGroupId);
+        assert.equal(post.data.success[i].requestedVehicleClass, data2[i].requestedVehicleClass);
         assert.equal(post.data.success[i].modeTVA, data2[i].modeTVA);
         assert.equal(post.data.success[i].observation, data2[i].observation);
         assert.equal(post.data.success[i].hireNumber, data2[i].hireNumber);
-        assert.equal(
-          post.data.success[i].bookingNumber,
-          data2[i].bookingNumber,
-        );
+        assert.equal(post.data.success[i].bookingNumber, data2[i].bookingNumber);
         assert.equal(post.data.success[i].refClient, data2[i].refClient);
-        assert.equal(
-          post.data.success[i].internalObservation,
-          data2[i].internalObservation,
-        );
+        assert.equal(post.data.success[i].internalObservation, data2[i].internalObservation);
         assert.equal(post.data.success[i].contact, data2[i].contact);
         assert.equal(post.data.success[i].salesRep, data2[i].salesRep);
-        assert.equal(
-          post.data.success[i].advertisedPriceExclVAT,
-          data2[i].advertisedPriceExclVAT,
-        );
+        assert.equal(post.data.success[i].advertisedPriceExclVAT, data2[i].advertisedPriceExclVAT);
 
         expect(post.data.success[i].missionId).to.be.a('number');
         if (data2[i].passenger) {
@@ -516,37 +479,41 @@ function testMountMissions() {
       assert.deepEqual(filtered, data1[0]);
     });
 
-    it('GET all 4 missions from data2', async () => {
+    it('GET an existing mission in DB having a onroad status', async () => {
+      const getStatus = await tryCall('GET', '/missions/932962/onroad-status');
+      expect(getStatus.data.isDriverAtPickupLocation).to.be.a('boolean');
+      expect(getStatus.data.passengerPickedUp).to.be.a('boolean');
+      expect(getStatus.data.passengerDroppedOff).to.be.a('boolean');
+      expect(getStatus.data.missionFinished).to.be.a('boolean');
+    });
+
+    it('GET all 4 missions from data2 with history and null onroad status', async () => {
       for (let i = 0; i < data2.length; i += 1) {
         const get = await tryCall('GET', `/missions/${data2[i].missionId}`);
         const filtered = filterCommonKeys(get.data, data2[i]);
         if (filtered.passenger) {
-          filtered.passenger = filterCommonKeys(
-            filtered.passenger,
-            data2[i].passenger,
-          );
+          filtered.passenger = filterCommonKeys(filtered.passenger, data2[i].passenger);
         }
         assert.deepEqual(filtered, data2[i]);
+
+        const getHistory = await tryCall('GET', `/missions/${data2[i].missionId}/history`);
+        assert.equal(getHistory.status, 200);
+        expect(getHistory.data).to.have.length.above(0);
+
+        const getONRstatus = await tryCall('GET', `/missions/${data2[i].missionId}/onroad-status`);
+        assert.equal(getONRstatus.status, 404);
       }
     });
   });
 
   describe('test PATCH', () => {
     it('Patch should 400 when not a single Body Item', async () => {
-      const patch = await tryCall(
-        'PATCH',
-        `/missions/${data2[0].missionId}`,
-        {},
-      );
+      const patch = await tryCall('PATCH', `/missions/${data2[0].missionId}`, {});
       assert.equal(patch.status, 400);
     });
 
     it('PATCH mission short', async () => {
-      const patch = await tryCall(
-        'PATCH',
-        `/missions/${data2[0].missionId}`,
-        patchLong,
-      );
+      const patch = await tryCall('PATCH', `/missions/${data2[0].missionId}`, patchLong);
       assert.equal(patch.status, 200);
     });
 
@@ -567,79 +534,43 @@ function testMountMissions() {
       assert.equal(patchLong.orderCanal, get.data.orderCanal);
       assert.equal(patchLong.contact, get.data.contact);
       assert.equal(patchLong.serviceLabel, get.data.serviceLabel);
-      assert.equal(
-        patchLong.advertisedPriceExclVAT,
-        get.data.advertisedPriceExclVAT,
-      );
-      assert.equal(
-        patchLong.advertisedPriceInclVAT,
-        get.data.advertisedPriceInclVAT,
-      );
-      assert.equal(
-        patchLong.advertisedPriceInfos,
-        get.data.advertisedPriceInfos,
-      );
-      assert.equal(
-        new Date(patchLong.flightTime).toTimeString(),
-        new Date(get.data.flightTime).toTimeString(),
-      );
-      assert.equal(
-        patchLong.requestedVehicleClass,
-        get.data.requestedVehicleClass,
-      );
+      assert.equal(patchLong.advertisedPriceExclVAT, get.data.advertisedPriceExclVAT);
+      assert.equal(patchLong.advertisedPriceInclVAT, get.data.advertisedPriceInclVAT);
+      assert.equal(patchLong.advertisedPriceInfos, get.data.advertisedPriceInfos);
+      assert.equal(new Date(patchLong.flightTime).toTimeString(), new Date(get.data.flightTime).toTimeString());
+      assert.equal(patchLong.requestedVehicleClass, get.data.requestedVehicleClass);
       assert.equal(patchLong.modeTVA, get.data.modeTVA);
       assert.equal(
         patchLong.driverAbilities[0].code,
-        get.data.driverAbilities.find(
-          (d) => d.code === patchLong.driverAbilities[0].code,
-        ).code,
+        get.data.driverAbilities.find((d) => d.code === patchLong.driverAbilities[0].code).code
       );
       assert.equal(
         patchLong.clientInstructions[0].code,
-        get.data.clientInstructions.find(
-          (d) => d.code === patchLong.clientInstructions[0].code,
-        ).code,
+        get.data.clientInstructions.find((d) => d.code === patchLong.clientInstructions[0].code).code
       );
     });
 
     it('PATCH mission short', async () => {
-      const patch = await tryCall(
-        'PATCH',
-        `/missions/${data2[0].missionId}`,
-        patchShort,
-      );
+      const patch = await tryCall('PATCH', `/missions/${data2[0].missionId}`, patchShort);
       assert.equal(patch.status, 200);
     });
 
     it('should get matched mission short', async () => {
       const get = await tryCall('GET', `/missions/${data2[0].missionId}`);
-<<<<<<< HEAD
-      assert.equal(patch.status, 200);
+      assert.equal(get.status, 200);
       assert.equal(patchShort.contact, get.data.contact);
       assert.equal(patchShort.serviceLabel, get.data.serviceLabel);
       assert.equal(patchShort.hireDate, get.data.hireDate);
       assert.equal(patchShort.subcontractorId, get.data.subcontractorId);
       assert.equal(patchShort.orderCanal, get.data.orderCanal);
-=======
-      assert.equal(patchLong.contact, get.data.contact);
-      assert.equal(patchLong.serviceLabel, get.data.serviceLabel);
-      assert.equal(patchLong.hireDate, get.data.hireDate);
-      assert.equal(patchLong.orderCanal, get.data.orderCanal);
->>>>>>> testRequest
       assert.equal(
         patchShort.driverAbilities[0].code,
-        get.data.driverAbilities.find(
-          (d) => d.code === patchShort.driverAbilities[0].code,
-        ).code,
+        get.data.driverAbilities.find((d) => d.code === patchShort.driverAbilities[0].code).code
       );
     });
 
     it('PATCH mission with null values', async () => {
-      const patch = await tryCall(
-        'PATCH',
-        `/missions/${data2[0].missionId}`,
-        patchNullValues,
-      );
+      const patch = await tryCall('PATCH', `/missions/${data2[0].missionId}`, patchNullValues);
 
       const get = await tryCall('GET', `/missions/${data2[0].missionId}`);
       assert.equal(patch.status, 200);
@@ -649,50 +580,25 @@ function testMountMissions() {
       assert.equal(patchNullValues.flightTime, get.data.flightTime);
       assert.equal(patchNullValues.observation, get.data.observation);
       assert.equal(patchNullValues.internalObservation, get.data.observation);
-      assert.equal(
-        patchNullValues.advertisedPriceExclVAT,
-        get.data.advertisedPriceExclVAT,
-      );
-      assert.equal(
-        patchNullValues.advertisedPriceInclVAT,
-        get.data.advertisedPriceInclVAT,
-      );
-      assert.equal(
-        patchNullValues.advertisedPriceInfos,
-        get.data.advertisedPriceInfos,
-      );
+      assert.equal(patchNullValues.advertisedPriceExclVAT, get.data.advertisedPriceExclVAT);
+      assert.equal(patchNullValues.advertisedPriceInclVAT, get.data.advertisedPriceInclVAT);
+      assert.equal(patchNullValues.advertisedPriceInfos, get.data.advertisedPriceInfos);
     });
 
     it('PATCH same mission again with not null values', async () => {
-      const patch = await tryCall(
-        'PATCH',
-        `/missions/${data2[0].missionId}`,
-        patchNullValues2,
-      );
+      const patch = await tryCall('PATCH', `/missions/${data2[0].missionId}`, patchNullValues2);
 
       const get = await tryCall('GET', `/missions/${data2[0].missionId}`);
       assert.equal(patch.status, 200);
       assert.equal(patchNullValues2.refClient, get.data.refClient);
       assert.equal(patchNullValues2.travelDetails, get.data.travelDetails);
       assert.equal(patchNullValues2.destProv, get.data.destProv);
-      assert.equal(
-        new Date(patchNullValues2.flightTime).toTimeString(),
-        new Date(get.data.flightTime).toTimeString(),
-      );
+      assert.equal(new Date(patchNullValues2.flightTime).toTimeString(), new Date(get.data.flightTime).toTimeString());
       assert.equal(patchNullValues2.observation, get.data.observation);
       assert.equal(patchNullValues2.internalObservation, get.data.observation);
-      assert.equal(
-        patchNullValues2.advertisedPriceExclVAT,
-        get.data.advertisedPriceExclVAT,
-      );
-      assert.equal(
-        patchNullValues2.advertisedPriceInclVAT,
-        get.data.advertisedPriceInclVAT,
-      );
-      assert.equal(
-        patchNullValues2.advertisedPriceInfos,
-        get.data.advertisedPriceInfos,
-      );
+      assert.equal(patchNullValues2.advertisedPriceExclVAT, get.data.advertisedPriceExclVAT);
+      assert.equal(patchNullValues2.advertisedPriceInclVAT, get.data.advertisedPriceInclVAT);
+      assert.equal(patchNullValues2.advertisedPriceInfos, get.data.advertisedPriceInfos);
     });
   });
 
@@ -717,9 +623,11 @@ describe('test GET many missions', () => {
       {
         dayStart: '2020-06-01',
         dayEnd: '2020-06-03',
-      },
+        resultsPerPage: 500,
+        page: 1,
+      }
     );
-    get.data.forEach((mission) => {
+    get.data.results.forEach((mission) => {
       expect(mission.missionId).to.be.a('number');
       expect(mission.client).to.be.a('string');
       expect(mission.bookingNumber).to.not.be.an('undefined');
@@ -769,11 +677,7 @@ describe('test GET many missions', () => {
 function testUnmountMissions() {
   describe('test CANCEL mission', () => {
     it('Should cancel missions (cancelled by client)', async () => {
-      const patch = await tryCall(
-        'PATCH',
-        `/missions/${data1[0].missionId}/cancel`,
-        cancelMissionLong,
-      );
+      const patch = await tryCall('PATCH', `/missions/${data1[0].missionId}/cancel`, cancelMissionLong);
       assert.equal(patch.status, 204);
 
       const get = await tryCall('GET', `/missions/${data1[0].missionId}`);
@@ -781,11 +685,7 @@ function testUnmountMissions() {
     });
 
     it('Should cancel missions (canceled by chabé)', async () => {
-      const patch2 = await tryCall(
-        'PATCH',
-        `/missions/${data1[0].missionId}/cancel`,
-        cancelMissionShort,
-      );
+      const patch2 = await tryCall('PATCH', `/missions/${data1[0].missionId}/cancel`, cancelMissionShort);
       assert.equal(patch2.status, 204);
 
       const get2 = await tryCall('GET', `/missions/${data1[0].missionId}`);

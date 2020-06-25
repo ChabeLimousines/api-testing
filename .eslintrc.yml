@@ -17,3 +17,12 @@ rules:
   global-require: off
   no-await-in-loop: off
   no-param-reassign: off
+  comma-dangle: off
+  object-curly-newline: off
+  implicit-arrow-linebreak: off
+  indent: off
+  operator-linebreak: off
+  function-paren-newline: off
+  max-len:
+    - error
+    - code: 135
