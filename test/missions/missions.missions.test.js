@@ -44,7 +44,6 @@ const data2 = [
     travelDetails: 'AF0002',
     requestedVehicleClass: 'ECLASS',
     observation: 'data2 mission1',
-    modeTVA: true,
     hireNumber: 'AAGD65',
     bookingNumber: '987856789',
     refClient: 'test123',
@@ -127,7 +126,6 @@ const patchLong = {
   refClient: 'lala__0',
   internalObservation: 'Secret message 2',
   requestedVehicleClass: 'SCLASS',
-  modeTVA: false,
   pax: 10,
   orderCanal: 'ZENBOOKING',
   advertisedPriceExclVAT: 150,
@@ -445,7 +443,6 @@ function testMountMissions() {
         assert.equal(post.data.success[i].destProv, data2[i].destProv);
         assert.equal(post.data.success[i].missionGroupId, data2[i].missionGroupId);
         assert.equal(post.data.success[i].requestedVehicleClass, data2[i].requestedVehicleClass);
-        assert.equal(post.data.success[i].modeTVA, data2[i].modeTVA);
         assert.equal(post.data.success[i].observation, data2[i].observation);
         assert.equal(post.data.success[i].hireNumber, data2[i].hireNumber);
         assert.equal(post.data.success[i].bookingNumber, data2[i].bookingNumber);
@@ -529,7 +526,6 @@ function testMountMissions() {
       assert.equal(patchLong.advertisedPriceInfos, get.data.advertisedPriceInfos);
       assert.equal(new Date(patchLong.flightTime).toTimeString(), new Date(get.data.flightTime).toTimeString());
       assert.equal(patchLong.requestedVehicleClass, get.data.requestedVehicleClass);
-      assert.equal(patchLong.modeTVA, get.data.modeTVA);
       assert.equal(
         patchLong.driverAbilities[0].code,
         get.data.driverAbilities.find((d) => d.code === patchLong.driverAbilities[0].code).code
@@ -638,7 +634,6 @@ describe('test GET many missions', () => {
       expect(mission.missionGroupId).to.not.be.an('undefined');
       expect(mission.modeTVA).to.not.be.an('undefined');
       expect(mission.state).to.not.be.an('undefined');
-      expect(mission.modeTVA).to.not.be.an('undefined');
       expect(mission.internalObservation).to.not.be.an('undefined');
       expect(mission.contact).to.not.be.an('undefined');
       expect(mission.salesRep).to.not.be.an('undefined');
