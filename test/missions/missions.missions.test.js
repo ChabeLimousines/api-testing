@@ -5,6 +5,10 @@ const { filterCommonKeys } = require('../../utils/objects.utils');
 const { passFull, passMin } = require('./passenger.missions.test');
 const { placeFull, placeMin } = require('./places.missions.test');
 
+const TEST_VEHICLE_ID = 'RPM579A8';
+
+const TEST_DRIVER_ID = 'GHERRA';
+
 const data1 = [
   {
     client: 'FFTRPM',
@@ -490,6 +494,30 @@ function testMountMissions() {
         assert.equal(getHistory.status, 200);
         expect(getHistory.data).to.have.length.above(0);
       }
+    });
+  });
+
+  describe('test PUT assign driver to mission', () => {
+    it('Assign driver to mission', async () => {
+      const put = await tryCall('PUT', `/missions/${data1[0].missionId}/driver/${TEST_DRIVER_ID}`);
+      assert.equal(put.status, 204);
+    });
+
+    it('Verify if driver assigned to mission', async () => {
+      const get = await tryCall('GET', `/missions/${data1[0].missionId}`);
+      assert.equal(get.data.driver.driverId, TEST_DRIVER_ID);
+    });
+  });
+
+  describe('test PUT assign vehicle to mission', () => {
+    it('Assign vehicle to mission', async () => {
+      const put = await tryCall('PUT', `/missions/${data1[0].missionId}/vehicle/${TEST_VEHICLE_ID}`);
+      assert.equal(put.status, 204);
+    });
+
+    it('Verify if vehicle assigned to mission', async () => {
+      const get = await tryCall('GET', `/missions/${data1[0].missionId}`);
+      assert.equal(get.data.vehicle.vehicleId, TEST_VEHICLE_ID);
     });
   });
 
