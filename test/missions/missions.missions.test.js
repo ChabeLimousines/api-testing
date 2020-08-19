@@ -4,6 +4,7 @@ const tryCall = require('../../utils/tryCall.utils');
 const { filterCommonKeys } = require('../../utils/objects.utils');
 const { passFull, passMin } = require('./passenger.missions.test');
 const { placeFull, placeMin } = require('./places.missions.test');
+const _ = require('lodash');
 
 const TEST_VEHICLE_ID = 'RPM579A8';
 
@@ -521,6 +522,49 @@ function testMountMissions() {
     });
   });
 
+  describe('test PUT close mission', () => {
+    it('Close a mission and pre-fill valuation form', async () => {
+      const post = await tryCall('POST', `/missions/`, [
+        {
+          client: 'FFTRPM',
+          pickupPlace: placeFull.placeId,
+          hireDate: '2020-06-16T01:00:00.000Z',
+          serviceType: '*',
+          department: 'NANTERRE2',
+        },
+        {
+          client: 'FFTRPM',
+          pickupPlace: placeFull.placeId,
+          hireDate: '2020-06-16T01:00:00.000Z',
+          serviceType: '*',
+          department: 'NANTERRE2',
+        },
+      ]);
+
+      assert.equal(post.status, 201);
+
+      const {
+        data: {
+          success: [{ missionId: missionId1 }, { missionId: missionId2 }],
+        },
+      } = post;
+
+      const put1 = await tryCall('PUT', `/missions/${missionId1}/closure`, {
+        endTime: '14:56',
+        endKm: 78098,
+        driverExtraTime: 120,
+      });
+
+      assert.equal(put1.status, 204);
+
+      const put2 = await tryCall('PUT', `/missions/${missionId2}/closure`, {
+        endTime: '14:00',
+      });
+
+      assert.equal(put2.status, 204);
+    });
+  });
+
   describe('test PATCH', () => {
     it('Patch should 400 when not a single Body Item', async () => {
       const patch = await tryCall('PATCH', `/missions/${data2[0].missionId}`, {});
@@ -703,6 +747,15 @@ function testUnmountMissions() {
 
       const get2 = await tryCall('GET', `/missions/${data1[0].missionId}`);
       assert.equal(5, get2.data.state);
+    });
+
+    it('Should delete all created missions', async () => {
+      const data = [...data1, ...data2];
+
+      data.forEach(async (d) => {
+        const del = await tryCall('DELETE', `/missions/${d.missionId}`);
+        assert.equal(del.status, 200);
+      });
     });
   });
 }
