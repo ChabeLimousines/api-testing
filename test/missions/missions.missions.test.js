@@ -550,7 +550,7 @@ function testMountMissions() {
       } = post;
 
       const put1 = await tryCall('PUT', `/missions/${missionId1}/closure`, {
-        endTime: '14:56',
+        hireEnd: '2020-06-16T04:00:00.000Z',
         endKm: 78098,
         driverExtraTime: 120,
       });
@@ -558,7 +558,7 @@ function testMountMissions() {
       assert.equal(put1.status, 204);
 
       const put2 = await tryCall('PUT', `/missions/${missionId2}/closure`, {
-        endTime: '14:00',
+        hireEnd: '2020-06-16T05:00:00.000Z',
       });
 
       assert.equal(put2.status, 204);
