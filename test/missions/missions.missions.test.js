@@ -551,7 +551,7 @@ function testMountMissions() {
 
       const put1 = await tryCall('PUT', `/missions/${missionId1}/closure`, {
         hireEnd: '2020-06-16T04:00:00.000Z',
-        endKm: 78098,
+        billedDurationInMinutes: 12 * 60,
         driverExtraTime: 120,
       });
 
