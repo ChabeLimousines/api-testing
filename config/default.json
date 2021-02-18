@@ -2,7 +2,7 @@
   "gateway": {
     "host": "localhost",
     "port": 4204,
-    "apikey": "dd4979cbb09b254dfbcfabf56cc3e55a954a58db3e6e49d8e9b42c0998b1f0a3dfdc6a7a444697d30cc27e3bebf33022911f143f8886301dba6100c9c9d5b37a",
+    "apikey":  "6546bcbd8c81e4047faba74de6c1c760c7a921c0fc4c8a7078cda6689407fca4016d9319f8c012de2f884926b602d096ae6f215ed66a4f26814f602da1591c8b",
     "username": "first_admin"
   }
 }
